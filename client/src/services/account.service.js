@@ -1,10 +1,10 @@
 import createClient from '../utils/client';
 
-class OrderDetailService {
+class AccountService {
 	#client;
 
 	constructor() {
-		this.#client = createClient('order-detail');
+		this.#client = createClient('account');
 	}
 
 	async getAll() {
@@ -28,4 +28,4 @@ class OrderDetailService {
 	}
 }
 
-export default new OrderDetailService();
+export default new AccountService();

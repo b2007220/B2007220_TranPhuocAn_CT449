@@ -1,6 +1,6 @@
 import createClient from '../utils/client';
 
-class ProductPicture {
+class ProductPictureService {
 	#client;
 
 	constructor() {
@@ -28,4 +28,4 @@ class ProductPicture {
 	}
 }
 
-export default new ProductPicture();
+export default new ProductPictureService();

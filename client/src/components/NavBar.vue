@@ -35,9 +35,13 @@
 
 <script setup>
 import Login from './Login.vue';
+import { useAuthStore } from './stores';
 </script>
 
 <script>
+const authStore = useAuthStore();
+const user = authStore.getUser;
+
 export default {
 	components: {
 		Login,

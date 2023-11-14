@@ -11,7 +11,7 @@ class AuthService {
 		this.#prisma = prisma;
 	}
 	async login({ email, password }) {
-		const existingUser = await this.#prisma.user.findUnique({
+		const existingUser = await this.#prisma.account.findUnique({
 			where: {
 				email,
 			},
@@ -32,14 +32,14 @@ class AuthService {
 	async signInWithIdToken(token) {
 		const user = await firebaseService.getUserByIdToken(token);
 
-		let existingUser = await this.#prisma.customer.findUnique({
+		let existingUser = await this.#prisma.account.findUnique({
 			where: {
 				uid: user.uid,
 			},
 		});
 
 		if (!existingUser) {
-			existingUser = await this.#prisma.customer.create({
+			existingUser = await this.#prisma.account.create({
 				data: {
 					fullName: user.name,
 					username: user.email,

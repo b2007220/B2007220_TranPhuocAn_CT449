@@ -7,34 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  username   String   @unique
+  password   String?
+  uid        String?  @unique
+  fullName   String?
+  address    String?
+  phone      String?
+  customer   Customer[]
+  employee   Employee[] 
+}
+
 model Customer {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  username String  @unique
-  fullName String?
-  password String?
-  address  String?
-  phone    String?
-  orders   Order[]
-  uid      String?  @unique
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orders    Order[]
+  accountId String  @db.ObjectId
+  account   Account @relation(fields: [accountId], references: [id])
+}
+
+model Employee {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  roleId    String  @db.ObjectId
+  role      Role    @relation(fields: [roleId], references: [id])
+  orders    Order[]
+  accountId String  @db.ObjectId
+  account   Account @relation(fields: [accountId], references: [id])
 }
 
 model Role {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   employees Employee[]
-}
-
-model Employee {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  username String  @unique
-  fullName String?
-  password String?
-  address  String?
-  phone    String?
-  roleId   String  @db.ObjectId
-  role     Role    @relation(fields: [roleId], references: [id])
-  uid      String? @unique
-  orders   Order[]
 }
 
 enum Status {
@@ -69,7 +73,7 @@ model Product {
   description  String?
   quantity     Int
   notes        String?
-  picture      ProductPicture[]
+  pictures      ProductPicture[]
   orderDetails OrderDetail[]
 }
 

@@ -1,6 +1,6 @@
 import createClient from '../utils/client';
 
-class Role {
+class RoleService {
 	#client;
 
 	constructor() {
@@ -28,4 +28,4 @@ class Role {
 	}
 }
 
-export default new Role();
+export default new RoleService();

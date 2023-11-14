@@ -1,6 +1,6 @@
 import createClient from '../utils/client';
 
-class Product {
+class ProductService {
 	#client;
 
 	constructor() {
@@ -28,4 +28,4 @@ class Product {
 	}
 }
 
-export default new Product();
+export default new ProductService();

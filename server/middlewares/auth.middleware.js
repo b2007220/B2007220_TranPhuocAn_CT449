@@ -1,5 +1,5 @@
 const tokenService = require('../services/token.service');
-const customerService = require('../services/customer.service');
+const accountService = require('../services/account.service');
 
 module.exports = async function (req, res, next) {
 	try {
@@ -11,7 +11,7 @@ module.exports = async function (req, res, next) {
 
 		const { id } = tokenService.decode(token);
 
-		const existingUser = await customerService.findOne(id);
+		const existingUser = await accountService.findOne(id);
 
 		if (!existingUser) {
 			return res.status(401).end();

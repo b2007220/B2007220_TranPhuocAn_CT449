@@ -1,6 +1,6 @@
 import createClient from '../utils/client';
 
-class Order {
+class OrderService {
 	#client;
 
 	constructor() {
@@ -28,4 +28,4 @@ class Order {
 	}
 }
 
-export default new Order();
+export default new OrderService();

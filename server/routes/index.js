@@ -4,6 +4,7 @@ const authMiddleware = require('../middlewares/auth.middleware');
 
 const router = Router();
 
+router.use('/account', require('./account.route'));
 router.use('/auth', require('./auth.route'));
 router.use('/customer', require('./customer.route'));
 router.use('/role', require('./role.route'));

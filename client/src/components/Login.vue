@@ -31,6 +31,7 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import authService from '../services/auth.service';
 import tokenService from '../services/token.service';
 import { auth } from '../firebase';
+import { useAuthStore } from './stores';
 export default {
 	methods: {
 		async handleButtonClick() {
@@ -44,6 +45,10 @@ export default {
 				tokenService.setToken(res.token);
 
 				const profile = await authService.getUserProfile();
+
+				const authStore = useAuthStore();
+
+				authStore.setUser(profile);
 
 				console.log(profile);
 			} catch (error) {
