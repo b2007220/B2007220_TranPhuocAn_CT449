@@ -30,4 +30,4 @@ class OrderService {
 		return await this.#client.order.delete({ where: { id } });
 	}
 }
-module.exports = new ProductService();
+module.exports = new OrderService();

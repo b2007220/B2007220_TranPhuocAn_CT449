@@ -1,6 +1,6 @@
 const authService = require('../services/auth.service');
 const tokenService = require('../services/token.service');
-const userService = require('../services/user.service');
+const customerService = require('../services/customer.service');
 
 class AuthController {
 	async loginWithIdToken(req, res, next) {

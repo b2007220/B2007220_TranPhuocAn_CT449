@@ -1,298 +1,213 @@
 <template>
-	<v-app :style="{ background: $vuetify.theme.themes.dark.background }">
-		<SideBar :drawer="drawer" />
-		<!-- 
-		
-		<v-container>
-			<v-toolbar flat color="rgba(0,0,0,0)">
-				<v-btn icon dark class="d-lg-none d-xl-flex" @click.stop="drawer = !drawer">
-					<v-icon>mdi-menu</v-icon>
-				</v-btn>
-				<v-spacer></v-spacer>
-				<v-text-field
-					label="Search on maufarm"
-					class="pt-5 d-none d-sm-flex"
-					dark
-					filled
-					prepend-inner-icon="mdi-magnify"
-					solo
-					flat
-					background-color="transparent"
-					rounded
-					outlined
-				></v-text-field>
-				<v-spacer></v-spacer>
-				<v-btn dark class="mr-2">
-					<v-icon left>fas fa-filter</v-icon>
-					Filtre
-				</v-btn>
-				<v-btn dark class="mr-2">
-					<v-icon left>fas fa-upload</v-icon>
-					Export
-				</v-btn>
-			</v-toolbar>
-			<h1 class="white--text">SALES</h1>
-			<p class="grey--text">A Great Way To Generate All The Motivation You Need To Get Fit</p>
-			<v-app-bar dark color="rgba(0,0,0,0)" flat class="">
-				<v-tabs color="#6F0DFF">
-					<v-tabs-slider color="#6F0DFF"></v-tabs-slider>
+ <v-app>
+  <NavBar />
+  <v-main>
+    <v-container>
+      <v-card class="mar-top" flat>
+        <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+        <v-tab :value="1">Newest</v-tab>
+        <v-tab :value="2">Highest Rated</v-tab>
+        <v-tab :value="3">Low Price to Hight</v-tab>
+        <v-tab :value="4">Low Price to Low</v-tab>
+        <v-tab :value="5">Delivery and Returns Products</v-tab>
+        </v-tabs>
+        <v-window v-model="tab">
+        <v-window-item v-for="n in 5" :key="n" :value="n">
+        <v-container fluid>
+          <v-row>
+            <v-col cols="12" sm="9">
+              <Product />
+            </v-col>
+            <v-col cols="12" sm="3">
+              <v-toolbar color="transparent">Categories
+                <v-spacer></v-spacer>
+                <v-btn icon="mdi-chevron-down"></v-btn>
+              </v-toolbar>
+              <v-row>
+                <v-col cols="12" sm="6" md="6">
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Sofas"
+                          color="info"
+                          value="success"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Bethrooms"
+                          color="info"
+                          value="info"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Beds"
+                          color="info"
+                          value="red"
+                          hide-details
+                        ></v-checkbox>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Sofas"
+                          color="info"
+                          value="success"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Bethrooms"
+                          color="info"
+                          value="info"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Beds"
+                          color="info"
+                          value="red"
+                          hide-details
+                        ></v-checkbox>
+                      </v-col>
+              </v-row>
+              <v-toolbar color="transparent">Colors<v-space></v-space>
+              <v-btn icon="mdi-chevron-down"></v-btn>
+              </v-toolbar>
+              <v-avatar color="grey" class="ml-1"></v-avatar>
+                    <v-avatar color="#DBEBCE" class="ml-1"></v-avatar>
+                    <v-avatar color="#EBDFD1" class="ml-1"></v-avatar>
+                    <v-avatar color="#E6C5B8" class="ml-1"></v-avatar>
+                    <v-avatar color="#D5CAB4" class="ml-1"></v-avatar>
+                    <v-avatar color="#E6C5B8" class="ml-1"></v-avatar><br />
+                    <v-avatar color="#E0E1E0" class="ml-1 mt-3"></v-avatar>
+                    <v-avatar color="#E2BAB6" class="ml-1 mt-3"></v-avatar>
+                    <v-avatar color="#CCD0E0" class="ml-1 mt-3"></v-avatar>
+                    <v-avatar color="#8B9DC2" class="ml-1 mt-3"></v-avatar>
+                    <v-avatar color="#959DB6" class="ml-1 mt-3"></v-avatar>
+                    <v-avatar color="#CFE7EB" class="ml-1 mt-3"></v-avatar>
+                    <v-toolbar color="transparent">Materials <v-spacer></v-spacer>
+                    <v-btn icon="mdi-chevron-down"></v-btn>
+                    </v-toolbar>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Wood"
+                          color="success"
+                          value="success"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Metal"
+                          color="success"
+                          value="info"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex4"
+                          label="Leathers"
+                          color="success"
+                          value="red"
+                          hide-details
+                        ></v-checkbox>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Fabrics"
+                          color="success"
+                          value="success"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Bethrooms"
+                          color="success"
+                          value="info"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="ex5"
+                          label="Beds"
+                          color="success"
+                          value="red"
+                          hide-details
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                    <v-toolbar color="transparent">Store Ratings<v-spacer></v-spacer>
+                    <v-btn icon="mdi-chevron-down"></v-btn>
+                    </v-toolbar>
+                    <v-rating v-model="r1" color="yellow-darken-3"></v-rating>
+                    <v-rating v-model="r2" color="yellow-darken-3"></v-rating>
+                    <v-rating v-model="r3" color="yellow-darken-3"></v-rating>
+                    <v-toolbar color="transparent">Price<v-spacer></v-spacer>
+                      <v-btn icon="mdi-chevron-down"></v-btn>
+                    </v-toolbar>
+                    <v-slider v-model="slider2" thumb-label="always" color="pink"></v-slider>
+            </v-col>
+          </v-row>
+        </v-container>
+        </v-window-item>
+        </v-window>
+      </v-card>
+    </v-container>
+  </v-main>
+  <Footer />
 
-					<v-tab class="withoutupercase">Fultillment Status View</v-tab>
-					<v-tab class="withoutupercase">Real-time Trackning</v-tab>
-					<v-tab class="withoutupercase">Sales View</v-tab>
-					<v-tab class="withoutupercase">Balances</v-tab>
-					<v-tab class="withoutupercase">Transactions</v-tab>
-					<v-tab class="withoutupercase">Engagement Rate</v-tab>
-				</v-tabs>
-				<v-spacer></v-spacer>
-				<v-btn dark text class="d-none d-sm-flex">
-					<v-icon left>mdi-magnify</v-icon>
-					SEARCH
-				</v-btn>
-				<v-btn rounded color="white" class="black--text">
-					List
-					<v-icon right>mdi-format-list-bulleted</v-icon>
-				</v-btn>
-				<v-btn icon>
-					<v-icon>mdi-apps</v-icon>
-				</v-btn>
-			</v-app-bar>
-			<v-divider color="grey"></v-divider>
-			<v-toolbar flat color="rgba(0,0,0,0)">
-				<v-divider vertical color="green" inset></v-divider>
-				<v-toolbar-title class="white--text ml-4">Alert</v-toolbar-title>
-				<v-spacer></v-spacer>
-				<v-chip class="ma-1 d-none d-sm-flex" color="" label text-color="white" dark>
-					<v-avatar color="white" rounded class="mr-2">
-						<v-img src="1.png" contain></v-img>
-					</v-avatar>
-					Nike new golf
-				</v-chip>
-				<v-chip class="ma-1 d-none d-sm-flex" color="" label text-color="white" dark>
-					<v-avatar color="white" rounded class="mr-2">
-						<v-img src="2.png" contain></v-img>
-					</v-avatar>
-
-					Sneakers printemps
-				</v-chip>
-				<v-spacer></v-spacer>
-				<v-btn dark class="mr-2 withoutupercase d-none d-sm-flex"> See All (10) </v-btn>
-				<v-btn dark class="mr-2" outlined>
-					<v-icon left>mdi-chevron-left</v-icon>
-					<v-icon right>mdi-chevron-right</v-icon>
-				</v-btn>
-			</v-toolbar>
-			<v-row class="mt-n14">
-				<v-col cols="12" xs="12" sm="6" md="4" lg="3" v-for="(shoe, i) in shoes" :key="i">
-					<v-card class="mx-auto my-12 rounded-xl" max-width="374" color="#151515">
-						<v-img height="170" :src="shoe.image"></v-img>
-						<v-toolbar color="transparent" class="mt-n7" flat>
-							<v-avatar color="white" rounded class="mr-2">
-								<v-img :src="shoe.pic" contain></v-img>
-							</v-avatar>
-							<v-spacer></v-spacer>
-							<v-avatar color="black" rounded class="mr-2" dark>
-								<div class="three">
-									<div class="four">
-										<span class="white--text caption">{{ shoe.price }}</span>
-									</div>
-									<div class="five">
-										<span class="green--text caption">HOLD</span>
-									</div>
-								</div>
-							</v-avatar>
-						</v-toolbar>
-						<v-card-title class="grey--text caption">{{ shoe.id }}</v-card-title>
-						<v-card-title class="grey--text text-grey-darken-1 caption mt-n6">{{ shoe.date }}</v-card-title>
-						<v-card-text class="white--text text-grey-darken-1 mt-n2">{{ shoe.marque }}</v-card-text>
-
-						<v-card-text class="mt-n4">
-							<v-chip-group active-class="deep-purple accent-4 white--text" column>
-								<v-chip label dark>{{ shoe.pay1 }}</v-chip>
-								<v-chip label dark>{{ shoe.pay2 }}</v-chip>
-								<v-spacer></v-spacer>
-								<v-avatar size="40">
-									<v-img :src="shoe.avatar"></v-img>
-								</v-avatar>
-							</v-chip-group>
-						</v-card-text>
-					</v-card>
-				</v-col>
-			</v-row>
-			<v-toolbar flat color="rgba(0,0,0,0) " class="mt-n14">
-				<v-divider vertical color="orange" inset></v-divider>
-				<v-toolbar-title class="white--text ml-4">Recent Orders</v-toolbar-title>
-				<v-spacer></v-spacer>
-				<v-chip class="ma-1 d-none d-sm-flex" color="" label text-color="white" dark>
-					<v-avatar color="white" rounded class="mr-2">
-						<v-img src="2.png" contain></v-img>
-					</v-avatar>
-					Nike new
-				</v-chip>
-				<v-chip class="ma-1 d-none d-sm-flex" color="" label text-color="white" dark>
-					<v-avatar color="white" rounded class="mr-2">
-						<v-img src="3.png" contain></v-img>
-					</v-avatar>
-
-					Zoom JO
-				</v-chip>
-				<v-chip class="ma-1 d-none d-sm-flex" color="" label text-color="white" dark>
-					<v-avatar color="white" rounded class="mr-2">
-						<v-img src="4.png" contain></v-img>
-					</v-avatar>
-
-					Jordon BZ
-				</v-chip>
-				<v-spacer></v-spacer>
-				<v-btn dark class="mr-2 withoutupercase d-none d-sm-flex"> See All (129) </v-btn>
-				<v-btn dark class="mr-2" outlined>
-					<v-icon left>mdi-chevron-left</v-icon>
-					<v-icon right>mdi-chevron-right</v-icon>
-				</v-btn>
-			</v-toolbar>
-			<v-row class="mt-n10">
-				<v-col cols="12" xs="12" sm="6" md="3" v-for="(order, i) in orders" :key="i">
-					<v-card class="mx-auto my-12 rounded-lg" max-width="374" color="#151515">
-						<v-toolbar color="transparent" class="mt-n6" flat>
-							<v-avatar color="white" rounded class="mr-2">
-								<v-img :src="order.pic" contain></v-img>
-							</v-avatar>
-							<v-spacer></v-spacer>
-							<v-avatar color="black" rounded class="mr-2" dark>
-								<div class="three">
-									<div class="four">
-										<span class="white--text caption">{{ order.price }}</span>
-									</div>
-									<div class="six">
-										<span class="orange--text caption">HOLD</span>
-									</div>
-								</div>
-							</v-avatar>
-						</v-toolbar>
-					</v-card>
-				</v-col>
-			</v-row>
-		</v-container>
-    <RightSideBar /> -->
-	</v-app>
+ </v-app>
 </template>
 
+<script setup>
+import NavBar from "../components/NavBar.vue";
+import Product from "../components/Product.vue";
+import Footer from "../components/Footer.vue";
+</script>
 <script>
-import RightSideBar from '../components/RightSideBar.vue';
-import SideBar from '../components/SideBar.vue';
-
 export default {
-	name: 'Home',
-	data: () => ({
-		selection: 1,
-		drawer: true,
-		shoes: [
-			{
-				image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$465',
-				id: 'ID: CK1911159967352',
-				date: '02.12.2021, 3:34 AM',
-				marque: 'Nike Air MAx',
-				pay1: 'LUXEMBURG',
-				pay2: 'ITALY',
-				avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-			},
-			{
-				image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$714',
-				id: 'ID: CK1911159967621',
-				date: '02.12.2021, 4:12 AM',
-				marque: 'AIR Jordon',
-				pay1: 'FUTURE',
-				pay2: 'WAR',
-				avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-			},
-			{
-				image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$982',
-				id: 'ID: CK1911159967532',
-				date: '02.12.2021, 6:24 AM',
-				marque: 'Adidas GR',
-				pay1: 'LONDON',
-				pay2: 'ALGERIA',
-				avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-			},
-			{
-				image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				pic: '4.png',
-				price: '$394',
-				id: 'ID: CK1911159968663',
-				date: '02.12.2021, 7:51 AM',
-				marque: 'Puma New',
-				pay1: 'SRILANKA',
-				pay2: 'PALAU',
-				avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-			},
-		],
-		orders: [
-			{
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$465',
-			},
-			{
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$714',
-			},
-			{
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$982',
-			},
-			{
-				pic: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
-				price: '$394',
-			},
-		],
-	}),
-	components: {
-		SideBar,
-		RightSideBar,
-	},
-	methods: {},
+  data: () => ({
+    tab: null,
+    r1: 4,
+    r2: 3,
+    r3: 2,
+    slider2: 50,
+
+    ex4: [
+      "red",
+      "indigo",
+      "orange",
+      "primary",
+      "secondary",
+      "success",
+      "info",
+      "warning",
+      "error",
+      "red darken-3",
+      "indigo darken-3",
+      "orange darken-3",
+    ],
+    ex5: [
+      "red",
+      "indigo",
+      "orange",
+      "primary",
+      "secondary",
+      "success",
+      "info",
+      "warning",
+      "error",
+      "red darken-3",
+      "indigo darken-3",
+      "orange darken-3",
+    ],
+  }),
 };
 </script>
 <style scoped>
-.v-tab.withoutupercase {
-	text-transform: none !important;
-}
-.v-tabs {
-	width: 50% !important;
-}
-.v-btn.withoutupercase {
-	text-transform: none !important;
-}
-/*div{
-    display:inline-block;
-    float:left;
-    color:#fff;
-    font-size:10px;
-  }*/
-
-.three {
-	width: 50px;
-	height: 50px;
-}
-
-.four {
-	width: 50px;
-	height: 25px;
-	background: black;
-}
-.five {
-	width: 50px;
-	height: 25px;
-	background: #042a0f;
-}
-.six {
-	width: 50px;
-	height: 25px;
-	background: #2c2107;
+.mar-top {
+  margin-top: 250px;
 }
 </style>
+

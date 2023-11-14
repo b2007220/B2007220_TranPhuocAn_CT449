@@ -15,7 +15,7 @@ model Customer {
   address  String?
   phone    String?
   orders   Order[]
-  uid      String  @unique
+  uid      String?  @unique
 }
 
 model Role {

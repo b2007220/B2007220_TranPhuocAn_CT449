@@ -1,15 +1,16 @@
-import '@fortawesome/fontawesome-free/css/all.css';
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
+import { createVuetify } from 'vuetify';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
 	theme: {
 		themes: {
-			dark: {
-				background: '#000000',
+			light: {
+				colors: {
+					primary: '#1867C0',
+					secondary: '#5CBBF6',
+				},
 			},
 		},
 	},

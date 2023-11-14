@@ -1,5 +1,5 @@
 const tokenService = require('../services/token.service');
-const userService = require('../services/user.service');
+const customerService = require('../services/customer.service');
 
 module.exports = async function (req, res, next) {
 	try {
@@ -11,7 +11,7 @@ module.exports = async function (req, res, next) {
 
 		const { id } = tokenService.decode(token);
 
-		const existingUser = await userService.getById(id);
+		const existingUser = await customerService.findOne(id);
 
 		if (!existingUser) {
 			return res.status(401).end();

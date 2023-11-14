@@ -18,7 +18,8 @@
     "vue-router": "^4.2.5",
     "vue-sweetalert2": "^5.0.5",
     "vuefire": "^3.1.18",
-    "vuetify": "^3.4.0"
+    "vuetify": "^3.4.0",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@mdi/font": "^7.3.67",

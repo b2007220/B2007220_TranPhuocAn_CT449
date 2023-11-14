@@ -32,17 +32,17 @@ class AuthService {
 	async signInWithIdToken(token) {
 		const user = await firebaseService.getUserByIdToken(token);
 
-		let existingUser = await this.#prisma.user.findUnique({
+		let existingUser = await this.#prisma.customer.findUnique({
 			where: {
 				uid: user.uid,
 			},
 		});
 
 		if (!existingUser) {
-			existingUser = await this.#prisma.user.create({
+			existingUser = await this.#prisma.customer.create({
 				data: {
 					fullName: user.name,
-					email: user.email,
+					username: user.email,
 					uid: user.uid,
 				},
 			});
