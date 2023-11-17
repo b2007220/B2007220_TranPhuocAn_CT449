@@ -1,33 +1,32 @@
 <template>
 	<div
 		class="image shape"
-		style="background: url('1.jpg'); background-size: contain; position: absolute; height: 300px; width: 100%"
+		style="
+			background: url('https://png.pngtree.com/background/20230528/original/pngtree-images-of-candles-jars-and-books-sitting-on-the-windowsill-picture-image_2773091.jpg');
+			background-position: center;
+			background-size: cover;
+			position: absolute;
+			height: 300px;
+			width: 100%;
+			background-repeat: no-repeat;
+		"
 	>
 		<v-app-bar color="transparent" class="text-white">
 			<template v-slot:prepend> </template>
-			<v-app-bar-title>Constructor</v-app-bar-title>
-			<v-btn append-icon="mdi mdi-chevron-down">Goods</v-btn>
-			<v-btn append-icon="mdi mdi-chevron-down">Rooms</v-btn>
-			<v-btn append-icon="mdi mdi-chevron-down">Inspiration</v-btn>
-			<v-btn append-icon="mdi mdi-chevron-down">News items</v-btn>
-			<v-text-field
-				density="compact"
-				label="Search products"
-				prepend-inner-icon="mdi-magnify"
-				single-line
-				hide-details
-				flat
-			></v-text-field>
-			<v-spacer></v-spacer>
-			<Login />
-			<v-btn prepend-icon="mdi mdi-cart">Bag</v-btn>
+			<template v-if="user">
+				<Menu />
+			</template>
+			<template v-else>
+				<Login />
+			</template>
+			<v-btn prepend-icon="mdi mdi-cart" @click="$emit('toggle-drawer')">Giỏ hàng</v-btn>
 		</v-app-bar>
 		<v-row>
 			<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-				<h1 class="top text-white"><strong>Furniture</strong> & Furnishings</h1>
+				<h1 class="top text-white"><strong>NẾN NHÀ AN</strong></h1>
 			</v-col>
 			<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-				<v-btn rounded="xl" class="tope">Shop Now</v-btn>
+				<v-btn rounded="xl" class="tope" to="/">Trang chủ</v-btn>
 			</v-col>
 		</v-row>
 	</div>
@@ -35,16 +34,21 @@
 
 <script setup>
 import Login from './Login.vue';
-import { useAuthStore } from './stores';
+import Menu from './Menu.vue';
+import { useAuthStore } from '../stores';
 </script>
 
 <script>
-const authStore = useAuthStore();
-const user = authStore.getUser;
-
 export default {
+	computed: {
+		user() {
+			const authStore = useAuthStore();
+			return authStore.getUser;
+		},
+	},
 	components: {
 		Login,
+		Menu,
 	},
 };
 </script>
