@@ -29,5 +29,6 @@ class OrderService {
 	async delete(id) {
 		return await this.#client.order.delete({ where: { id } });
 	}
+
 }
 module.exports = new OrderService();

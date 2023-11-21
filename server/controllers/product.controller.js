@@ -46,5 +46,23 @@ class ProductController {
 			next(error);
 		}
 	}
+
+	async getProductsByPriceAsc(req, res, next) {
+		try {
+			const products = await productService.getProductsByPriceAsc();
+			res.send(products);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getProductsByPriceDesc(req, res, next) {
+		try {
+			const products = await productService.getProductsByPriceDesc();
+			res.send(products);
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 module.exports = new ProductController();

@@ -17,7 +17,12 @@
 import { useAuthStore } from '../stores';
 export default {
 	data: () => ({
-		items: [{ title: 'Thông tin cá nhân' }, { title: 'Đổi mật khẩu' }, { title: 'Đăng xuất' }],
+		items: [
+			{ title: 'Thông tin cá nhân' },
+			{ title: 'Đổi mật khẩu' },
+			{ title: 'Lịch sử mua hàng' },
+			{ title: 'Đăng xuất' },
+		],
 	}),
 	methods: {
 		handleItemClick(item) {

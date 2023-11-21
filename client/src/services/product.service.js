@@ -26,6 +26,12 @@ class ProductService {
 	async delete(id) {
 		return await this.#client.delete(id);
 	}
+	async getProductsByPriceAsc() {
+		return await this.#client.get('price/asc');
+	}
+	async getProductsByPriceDesc() {
+		return await this.#client.get('price/desc');
+	}
 }
 
 export default new ProductService();

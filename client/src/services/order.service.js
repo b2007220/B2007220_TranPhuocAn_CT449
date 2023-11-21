@@ -26,6 +26,10 @@ class OrderService {
 	async delete(id) {
 		return await this.#client.delete(id);
 	}
+
+	async makePayment(data) {
+		return await this.#client.post('make-payment', data);
+	}
 }
 
 export default new OrderService();

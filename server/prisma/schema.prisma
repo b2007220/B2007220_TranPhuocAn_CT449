@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Account {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  username   String   @unique
-  password   String?
-  uid        String?  @unique
-  fullName   String?
-  address    String?
-  phone      String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  customer   Customer[]
-  employee   Employee[] 
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  username  String     @unique
+  password  String?
+  uid       String?    @unique
+  fullName  String?
+  address   String?
+  phone     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  customer  Customer[]
+  employee  Employee[]
 }
 
 model Customer {
@@ -28,19 +28,17 @@ model Customer {
   account   Account @relation(fields: [accountId], references: [id])
 }
 
+enum Role {
+  MANAGER
+  EMPLOYEE
+}
+
 model Employee {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  roleId    String  @db.ObjectId
-  role      Role    @relation(fields: [roleId], references: [id])
+  role      Role    @default(EMPLOYEE)
   orders    Order[]
   accountId String  @db.ObjectId
   account   Account @relation(fields: [accountId], references: [id])
-}
-
-model Role {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  employees Employee[]
 }
 
 enum Status {
@@ -53,17 +51,18 @@ model Order {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
   customerId   String        @db.ObjectId
   customer     Customer      @relation(fields: [customerId], references: [id])
-  employeeId   String        @db.ObjectId
-  employee     Employee      @relation(fields: [employeeId], references: [id])
+  employeeId   String?       @db.ObjectId
+  employee     Employee?     @relation(fields: [employeeId], references: [id])
   orderDate    DateTime      @default(now())
-  deliveryDate DateTime
+  deliveryDate DateTime?
   status       Status        @default(PENDING)
+  total        Float
   orderDetails OrderDetail[]
 }
 
 model ProductPicture {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
+  url       String
   productId String  @db.ObjectId
   product   Product @relation(fields: [productId], references: [id])
 }
@@ -73,9 +72,9 @@ model Product {
   name         String
   price        Float
   description  String?
-  quantity     Int
+  stock        Int
   notes        String?
-  pictures      ProductPicture[]
+  pictures     ProductPicture[]
   orderDetails OrderDetail[]
 }
 

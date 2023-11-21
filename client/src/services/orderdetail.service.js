@@ -26,6 +26,7 @@ class OrderDetailService {
 	async delete(id) {
 		return await this.#client.delete(id);
 	}
+	
 }
 
 export default new OrderDetailService();

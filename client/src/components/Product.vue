@@ -17,64 +17,48 @@
 	</v-row>
 </template>
 
-<script>
+<script setup>
 import { useCartStore } from '../stores/cart';
+import productService from '../services/product.service';
+</script>
+<script>
 export default {
 	data: () => ({
-		products: [
-			{
-				id: '1',
-				img: ' 3.jpg',
-				type: 'Bedroom',
-				money: '450$',
-				quantity: '1',
-			},
-			{
-				img: '4.jpg',
-				type: 'Furniture',
-				money: '600$',
-			},
-			{
-				img: '5.jpg',
-				type: 'Home',
-				money: '430$',
-			},
-			{
-				img: '6.jpg',
-				type: 'Interior',
-				money: '303$',
-			},
-			{
-				img: ' 7.jpg',
-				type: 'Living room',
-				money: '700$',
-			},
-			{
-				img: '8.jpg',
-				type: 'Living room',
-				money: '360$',
-			},
-			{
-				img: '9.jpg',
-				type: 'Living room',
-				money: '520$',
-			},
-			{
-				img: '10.jpg',
-				type: 'Living room',
-				money: '360$',
-			},
-			{
-				img: '2.jpg',
-				type: 'Living room',
-				money: '360$',
-			},
-		],
+		products: [],
+		sortByL: null,
 	}),
+	async created() {
+		try {
+			this.sortProducts();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+	watch: {
+		tab(newTab) {
+			this.sortProducts();
+		},
+	},
 	methods: {
-		addToCart(product) {
+		async addToCart(product) {
 			const cartStore = useCartStore();
 			cartStore.addToCart(product);
+		},
+		async sortProducts() {
+			switch (this.tab) {
+				case 1:
+					this.products = await productService.getAll();
+					break;
+				case 2:
+					this.products = await productService.getProductsByPriceAsc();
+					break;
+				case 3:
+					this.products = await productService.getProductsByPriceDesc();
+					break;
+				default:
+					this.products = await productService.getAll();
+					break;
+			}
 		},
 	},
 };

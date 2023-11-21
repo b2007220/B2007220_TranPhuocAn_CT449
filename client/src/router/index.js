@@ -17,6 +17,17 @@ const routes = [
 		],
 	},
 	{
+		path: '/admin',
+		component: () => import('../layouts/default/Default.vue'),
+		children: [
+			{
+				path: '',
+				name: 'Admin',
+				component: () => import('../views/AdminPage.vue'),
+			},
+		],
+	},
+	{
 		path: '/:pathMatch(.*)*',
 		name: 'notfound',
 		component: () => import('../views/NotFound.vue'),

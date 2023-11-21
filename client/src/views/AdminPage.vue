@@ -1,0 +1,194 @@
+<template>
+	<v-app id="inspire" :style="{ background: '#ced6e0' }">
+		<SideBar />
+		<v-main>
+			<v-container class="px-6 mt-n2" fluid>
+				<v-row>
+					<v-col cols="12" sm="6">
+						<v-card color="#00cec9" theme="dark" class="rounded-xl" height="100">
+							<div class="d-flex flex-no-wrap justify-space-between">
+								<div>
+									<v-card-title class="text-h5 mt-3">Doanh thu trong tháng</v-card-title>
+									<v-card-subtitle>$548</v-card-subtitle>
+								</div>
+							</div>
+						</v-card>
+					</v-col>
+					<v-col cols="12" sm="6">
+						<v-card color="#00cec9" theme="dark" class="rounded-xl" height="100">
+							<div class="d-flex flex-no-wrap justify-space-between">
+								<div>
+									<v-card-title class="text-h5 mt-3">Sản phẩm bán được trong tháng</v-card-title>
+									<v-card-subtitle>Số lượng</v-card-subtitle>
+								</div>
+							</div>
+						</v-card>
+					</v-col>
+					
+					
+					<v-col cols="12" sm="12" class="mt-n4">
+						<v-card class="mx-auto border rounded p-" max-width="100%">
+							<v-data-table-server
+								v-model:items-per-page="itemsPerPage"
+								:headers="headers"
+								:items-length="totalItems"
+								:items="serverItems"
+								:loading="loading"
+								item-value="name"
+								@update:options="loadItems"
+							></v-data-table-server>
+						</v-card>
+					</v-col>
+				</v-row>
+			</v-container>
+		</v-main>
+	</v-app>
+</template>
+
+<script setup>
+import SideBar from '../components/SideBar.vue';
+</script>
+<script>
+const FakeAPI = {
+	async fetch({ page, itemsPerPage, sortBy }) {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				const start = (page - 1) * itemsPerPage;
+				const end = start + itemsPerPage;
+				const items = desserts.slice();
+
+				if (sortBy.length) {
+					const sortKey = sortBy[0].key;
+					const sortOrder = sortBy[0].order;
+					items.sort((a, b) => {
+						const aValue = a[sortKey];
+						const bValue = b[sortKey];
+						return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
+					});
+				}
+
+				const paginated = items.slice(start, end);
+
+				resolve({ items: paginated, total: items.length });
+			}, 500);
+		});
+	},
+};
+const desserts = [
+	{
+		name: 'Frozen Yogurt',
+		calories: 159,
+		fat: 6.0,
+		carbs: 24,
+		protein: 4.0,
+		iron: '1',
+	},
+	{
+		name: 'Jelly bean',
+		calories: 375,
+		fat: 0.0,
+		carbs: 94,
+		protein: 0.0,
+		iron: '0',
+	},
+	{
+		name: 'KitKat',
+		calories: 518,
+		fat: 26.0,
+		carbs: 65,
+		protein: 7,
+		iron: '6',
+	},
+	{
+		name: 'Eclair',
+		calories: 262,
+		fat: 16.0,
+		carbs: 23,
+		protein: 6.0,
+		iron: '7',
+	},
+	{
+		name: 'Gingerbread',
+		calories: 356,
+		fat: 16.0,
+		carbs: 49,
+		protein: 3.9,
+		iron: '16',
+	},
+	{
+		name: 'Ice cream sandwich',
+		calories: 237,
+		fat: 9.0,
+		carbs: 37,
+		protein: 4.3,
+		iron: '1',
+	},
+	{
+		name: 'Lollipop',
+		calories: 392,
+		fat: 0.2,
+		carbs: 98,
+		protein: 0,
+		iron: '2',
+	},
+	{
+		name: 'Cupcake',
+		calories: 305,
+		fat: 3.7,
+		carbs: 67,
+		protein: 4.3,
+		iron: '8',
+	},
+	{
+		name: 'Honeycomb',
+		calories: 408,
+		fat: 3.2,
+		carbs: 87,
+		protein: 6.5,
+		iron: '45',
+	},
+	{
+		name: 'Donut',
+		calories: 452,
+		fat: 25.0,
+		carbs: 51,
+		protein: 4.9,
+		iron: '22',
+	},
+];
+export default {
+	data: () => ({
+		itemsPerPage: 5,
+		headers: [
+			{
+				title: 'Dessert (100g serving)',
+				align: 'start',
+				sortable: false,
+				key: 'name',
+			},
+			{ title: 'Calories', key: 'calories', align: 'end' },
+			{ title: 'Fat (g)', key: 'fat', align: 'end' },
+			{ title: 'Carbs (g)', key: 'carbs', align: 'end' },
+			{ title: 'Protein (g)', key: 'protein', align: 'end' },
+			{ title: 'Iron (%)', key: 'iron', align: 'end' },
+		],
+		serverItems: [],
+		loading: true,
+		totalItems: 0,
+	}),
+	methods: {
+		loadItems({ page, itemsPerPage, sortBy }) {
+			this.loading = true;
+			FakeAPI.fetch({ page, itemsPerPage, sortBy }).then(({ items, total }) => {
+				this.serverItems = items;
+				this.totalItems = total;
+				this.loading = false;
+			});
+		},
+	},
+	components: {
+		SideBar,
+	},
+};
+</script>
+<style scoped></style>

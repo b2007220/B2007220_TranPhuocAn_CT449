@@ -29,5 +29,13 @@ class ProductService {
 	async delete(id) {
 		return await this.#client.product.delete({ where: { id } });
 	}
+
+	async getProductsByPriceAsc() {
+		return await this.#client.product.findMany({ orderBy: { price: 'asc' } });
+	}
+
+	async getProductsByPriceDesc() {
+		return await this.#client.product.findMany({ orderBy: { price: 'desc' } });
+	}
 }
 module.exports = new ProductService();
