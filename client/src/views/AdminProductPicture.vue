@@ -14,7 +14,10 @@
 								:loading="loading"
 								item-value="name"
 								@update:options="loadItems"
-							></v-data-table-server>
+								><template #item.url="{ value }">
+									<v-img :src="value" height="150" cover width="150"></v-img>
+								</template>
+							</v-data-table-server>
 						</v-card>
 					</v-container>
 				</v-col>
@@ -23,20 +26,19 @@
 						<v-card>
 							<v-card-title class="text-h5">Thêm sản phẩm</v-card-title>
 							<v-card-text>
-								<v-form @submit.prevent="createProduct">
-									<v-text-field v-model="product.name" label="Tên sản phẩm" required></v-text-field>
-									<v-text-field v-model="product.price" label="Giá tiền" required></v-text-field>
+								<v-form @submit.prevent="createProductPicture">
 									<v-text-field
-										v-model="product.description"
-										label="Mô tả sản phẩm"
+										v-model="productPicture.url"
+										label="Đường dẫn đến ảnh"
 										required
 									></v-text-field>
-									<v-text-field
-										v-model="product.stock"
-										label="Số hàng trong kho"
+									<v-select
+										v-model="productPicture.product"
+										:items="products"
+										label="Sản phẩm"
+										:item-props="itemProps"
 										required
-									></v-text-field>
-									<v-text-field v-model="product.note" label="Ghi chú" required></v-text-field>
+									></v-select>
 									<v-btn color="primary" type="submit">Thêm sản phẩm</v-btn>
 								</v-form>
 							</v-card-text>
@@ -49,8 +51,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import SideBar from '../components/SideBar.vue';
+import productPictureService from '../services/productPicture.service';
 import productService from '../services/product.service';
 </script>
 <script>
@@ -60,7 +63,7 @@ const FakeAPI = {
 			setTimeout(() => {
 				const start = (page - 1) * itemsPerPage;
 				const end = start + itemsPerPage;
-				const items = products.slice();
+				const items = productPictures.slice();
 
 				if (sortBy.length) {
 					const sortKey = sortBy[0].key;
@@ -79,23 +82,39 @@ const FakeAPI = {
 		});
 	},
 };
-const products = await productService.getAll();
-const product = ref({
-	name: '',
-	price: 0,
-	description: '',
-	stock: 0,
-	note: '',
-});
-const createProduct = async () => {
+const productPictures = await productPictureService.getAll();
+
+const products = ref([]);
+
+const loadProducts = async () => {
 	try {
-		const newProduct = await productService.create(product.value);
+		const result = await productService.getAll();
+		products.value = result;
+	} catch (error) {
+		console.error('Error fetching products:', error);
+	}
+};
+
+const productPicture = ref({
+	url: '',
+	product: null,
+});
+
+const createProductPicture = async () => {
+	try {
+		const newProductPicture = await productPictureService.create(productPicture.value);
 		alert('Thêm sản phẩm thành công');
-		serverItems.value.push(newProduct);
+		serverItems.value.push(newProductPicture);
 	} catch (error) {
 		console.log(error);
 	}
 };
+const itemProps = (products) => {
+	return {
+		title: products.name,
+	};
+};
+loadProducts();
 export default {
 	data: () => ({
 		itemsPerPage: 5,
@@ -104,12 +123,9 @@ export default {
 				title: 'Tên sản phẩm',
 				align: 'start',
 				sortable: false,
-				key: 'name',
+				key: 'product.name',
 			},
-			{ title: 'Giá sản phẩm', key: 'price', align: 'end' },
-			{ title: 'Mô tả sản phẩm', key: 'description', align: 'end' },
-			{ title: 'Số lượng trong kho', key: 'stock', align: 'end' },
-			{ title: 'Ghi chú', key: 'note', align: 'end' },
+			{ title: 'Hình ảnh', key: 'url', align: 'start' },
 		],
 		serverItems: [],
 		loading: true,

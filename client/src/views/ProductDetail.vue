@@ -14,7 +14,7 @@
 				<v-layout>
 					<v-app-bar color="teal-darken-4">
 						<template v-slot:image>
-							<v-img style="background-color: #4F493F;"></v-img>
+							<v-img style="background-color: #4f493f"></v-img>
 						</template>
 						<v-app-bar-title>Giỏ hàng</v-app-bar-title>
 						<v-spacer></v-spacer>
@@ -22,15 +22,15 @@
 					<v-main>
 						<v-container fluid>
 							<v-row dense>
-								<v-col cols="12" v-for="item in cartItems" :key="item.id">
-									<v-card color="#1F7087" theme="dark">
+								<v-col cols="12" v-for="product in cartItems" :key="product.id">
+									<v-card color="#908471" theme="dark">
 										<div class="d-flex flex-no-wrap justify-space-between">
 											<div>
-												<v-card-title class="text-h5"> {{ item.type }} </v-card-title>
-												<v-card-subtitle>{{ item.money }}</v-card-subtitle>
+												<v-card-title class="text-h5"> {{ product.name }} </v-card-title>
+												<v-card-subtitle>{{ product.price }}</v-card-subtitle>
 												<v-card-actions>
 													<v-text-field
-														v-model="item.quantity"
+														v-model="product.stock"
 														type="number"
 														class="ms-2"
 														variant="outlined"
@@ -41,18 +41,27 @@
 													<v-btn
 														icon="mdi mdi-menu-left"
 														size="small"
-														@click="decreaseQuantity(item)"
+														@click="decreaseQuantity(product)"
 													></v-btn>
 													<v-btn
 														icon="mdi mdi-menu-right"
 														size="small"
-														@click="increaseQuantity(item)"
+														@click="increaseQuantity(product)"
 													></v-btn>
-													<v-btn @click="removeFromCart(item.id)" size="small">Xóa</v-btn>
+													<v-btn @click="removeFromCart(product.id)" size="small">Xóa</v-btn>
 												</v-card-actions>
 											</div>
 											<v-avatar class="ma-3" size="100" rounded="0">
-												<v-img :src="item.img" cover></v-img>
+												<v-img
+													v-if="product.productPictures.length > 0"
+													:src="product.productPictures[0].url"
+													cover
+												></v-img>
+												<v-img
+													v-else
+													src="https://t4.ftcdn.net/jpg/05/41/46/75/360_F_541467587_GfiiQ3H085d1BSLzqODWCG5EoVK3z6cy.jpg"
+													cover
+												></v-img>
 											</v-avatar>
 										</div>
 									</v-card>
@@ -65,8 +74,8 @@
 										Tổng tiền:
 										{{
 											cartItems.reduce(
-												(total, item) =>
-													total + parseFloat(item.money) * parseInt(item.quantity),
+												(total, product) =>
+													total + parseFloat(product.price) * parseInt(product.stock),
 												0,
 											)
 										}}$
@@ -76,17 +85,7 @@
 									<v-divider></v-divider>
 								</v-col>
 								<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-									<v-textarea
-										bg-color="white"
-										label="Địa chỉ giao hàng"
-										rows="1"
-										auto-grow
-										variant="filled"
-									></v-textarea>
-								</v-col>
-
-								<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-									<v-btn rounded="xl">Thanh toán</v-btn>
+									<v-btn rounded="xl" @click="createOrder">Thanh toán</v-btn>
 								</v-col>
 							</v-row>
 						</v-container>
@@ -180,15 +179,40 @@ export default {
 			const cartStore = useCartStore();
 			cartStore.removeFromCart(id);
 		},
-		decreaseQuantity(item) {
-			if (item.quantity > 1) {
-				item.quantity--;
+		decreaseQuantity(product) {
+			if (product.stock > 1) {
+				product.stock--;
 			} else {
 				this.removeFromCart(item.id);
 			}
 		},
-		increaseQuantity(item) {
-			item.quantity++;
+		increaseQuantity(product) {
+			product.stock++;
+		},
+		async createOrder() {
+			const cartStore = useCartStore();
+			if(!this.user) {
+				alert('Vui lòng đăng nhập');
+				return;
+			}
+			if (cartStore.getCartItems.length === 0) {
+				alert('Giỏ hàng trống');
+				return;
+			}
+			if (!this.user.address || !this.user.phone) {
+				alert('Vui lòng cập nhật địa chỉ và số điện thoại');
+				return;
+			}
+			const order = {
+				products: cartStore.getCartItems,
+				total: cartStore.getCartItems.reduce(
+					(total, product) => total + parseFloat(product.price) * parseInt(product.stock),
+					0,
+				),
+			};
+			const payment = await orderService.makePayment(order);
+			cartStore.clearCart();
+			alert('Thanh toán thành công!');
 		},
 	},
 };

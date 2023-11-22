@@ -7,12 +7,24 @@ class ProductService {
 	}
 
 	async create(product) {
-		const newProduct = await this.#client.product.create({ data: product });
+		const newProduct = await this.#client.product.create({
+			data: {
+				name: product.name,
+				price: parseFloat(product.price),
+				stock: parseInt(product.stock),
+				description: product.description,
+				notes: product.notes,
+			},
+		});
 		return newProduct;
 	}
 
 	async findAll() {
-		const products = await this.#client.product.findMany();
+		const products = await this.#client.product.findMany({
+			include: {
+				productPictures: true,
+			},
+		});
 		return products;
 	}
 
@@ -31,11 +43,21 @@ class ProductService {
 	}
 
 	async getProductsByPriceAsc() {
-		return await this.#client.product.findMany({ orderBy: { price: 'asc' } });
+		return await this.#client.product.findMany({
+			include: {
+				productPictures: true,
+			},
+			orderBy: { price: 'asc' },
+		});
 	}
 
 	async getProductsByPriceDesc() {
-		return await this.#client.product.findMany({ orderBy: { price: 'desc' } });
+		return await this.#client.product.findMany({
+			include: {
+				productPictures: true,
+			},
+			orderBy: { price: 'desc' },
+		});
 	}
 }
 module.exports = new ProductService();

@@ -23,6 +23,7 @@ import { ref } from 'vue';
 const links = [
 	{ text: 'Tài khoản', icon: 'mdi mdi-home-outline' },
 	{ text: 'Sản phẩm', icon: 'mdi mdi-file-chart-outline' },
+	{ text: 'Hình ảnh sản phẩm', icon: 'mdi mdi-image-area' },
 	{ text: 'Đơn đặt hàng', icon: 'mdi mdi-chart-pie' },
 	{ text: 'Trở về trang chủ', icon: 'mdi mdi-logout' },
 ];
@@ -40,11 +41,13 @@ export default {
 			if (item.text === 'Trở về trang chủ') {
 				this.$router.push('/');
 			} else if (item.text === 'Tài khoản') {
-				this.$router.push('admin');
+				this.$router.push('/admin');
 			} else if (item.text === 'Sản phẩm') {
 				this.$router.push('/admin/product');
 			} else if (item.text === 'Đơn đặt hàng') {
 				this.$router.push('/admin/order');
+			} else if (item.text === 'Hình ảnh sản phẩm') {
+				this.$router.push('/admin/product/picture');
 			}
 		},
 	},

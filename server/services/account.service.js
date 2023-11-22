@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
-
+const passService = require('./pass.service');
 class AccountService {
 	#client;
 	constructor() {
@@ -30,10 +30,12 @@ class AccountService {
 	async delete(id) {
 		return await this.#client.account.delete({ where: { id } });
 	}
-	
+
 	async updatePassword(id, password) {
-		const updatedAccount = await this.#client.account.update({ where: { id }, data: { password } });
-		console.log(updatedAccount);
+		const updatedAccount = await this.#client.account.update({
+			where: { id },
+			data: { password: await passService.hash(password) },
+		});
 		return updatedAccount;
 	}
 }

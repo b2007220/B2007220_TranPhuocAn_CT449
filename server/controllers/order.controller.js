@@ -1,4 +1,3 @@
-
 const orderService = require('../services/order.service');
 const productService = require('../services/product.service');
 const orderDetailService = require('../services/orderdetail.service');
@@ -21,7 +20,14 @@ class OrderController {
 			next(error);
 		}
 	}
-
+	async findAllByCustomer(req, res, next) {
+		try {
+			const orders = await orderService.findAllByCustomer(req.user.id);
+			res.send(orders);
+		} catch (error) {
+			next(error);
+		}
+	}
 	async findOne(req, res, next) {
 		try {
 			const order = await orderService.findOne(req.params.id);
@@ -52,12 +58,18 @@ class OrderController {
 
 	async makePayment(req, res, next) {
 		try {
-			const { cartItems, shippingAddress, total } = req.body;
-			const order = await orderService.create({total, customerId: req.user.id});
-			cartItems.forEach(async (product) => {
-				if (!product) throw new Error('Product not found');
-				await productService.update(product.id, { stock: product.stock - product.quantity });
-				await orderDetailService.create({productId: product.id, orderId: order.id, quantity: product.quantity, unitPrice: product.price - (product.discount*product.price/100)});
+			const { products, total } = req.body;
+			const order = await orderService.create({ total, customerId: req.user.id, customer: req.user });
+			products.forEach(async (termProduct) => {
+				if (!termProduct) throw new Error('Product not found');
+				const product = await productService.findOne(termProduct.id);
+				await productService.update(termProduct.id, { stock: product.stock - termProduct.stock });
+				await orderDetailService.create({
+					productId: termProduct.id,
+					orderId: order.id,
+					quantity: termProduct.stock,
+					unitPrice: termProduct.price * termProduct.stock,
+				});
 			});
 			res.send(order);
 		} catch (error) {

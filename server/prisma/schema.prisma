@@ -8,17 +8,18 @@ datasource db {
 }
 
 model Account {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  username  String     @unique
-  password  String?
-  uid       String?    @unique
-  fullName  String?
-  address   String?
-  phone     String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  customer  Customer[]
-  employee  Employee[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  username   String     @unique
+  password   String?
+  uid        String?    @unique
+  fullName   String?
+  address    String?
+  phone      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  isEmployee Boolean?   @default(false)
+  customer   Customer[]
+  employee   Employee[]
 }
 
 model Customer {
@@ -50,8 +51,8 @@ enum Status {
 
 model Order {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  customerId   String        @db.ObjectId
-  customer     Customer      @relation(fields: [customerId], references: [id])
+  customerId   String?        @db.ObjectId
+  customer     Customer?      @relation(fields: [customerId], references: [id])
   employeeId   String?       @db.ObjectId
   employee     Employee?     @relation(fields: [employeeId], references: [id])
   orderDate    DateTime      @default(now())

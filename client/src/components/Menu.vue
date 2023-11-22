@@ -21,8 +21,8 @@ export default {
 		items: [
 			{ title: 'Thông tin cá nhân' },
 			{ title: 'Lịch sử mua hàng' },
-			{ title: 'Đăng xuất' },
 			{ title: 'Trang quản trị' },
+			{ title: 'Đăng xuất' },
 		],
 	}),
 	methods: {

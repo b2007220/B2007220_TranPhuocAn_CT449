@@ -14,7 +14,7 @@
 				<v-layout>
 					<v-app-bar color="teal-darken-4">
 						<template v-slot:image>
-							<v-img style="background-color: #4F493F;"></v-img>
+							<v-img style="background-color: #4f493f"></v-img>
 						</template>
 						<v-app-bar-title>Giỏ hàng</v-app-bar-title>
 						<v-spacer></v-spacer>
@@ -22,15 +22,15 @@
 					<v-main>
 						<v-container fluid>
 							<v-row dense>
-								<v-col cols="12" v-for="item in cartItems" :key="item.id">
-									<v-card color="#1F7087" theme="dark">
+								<v-col cols="12" v-for="product in cartItems" :key="product.id">
+									<v-card color="#908471" theme="dark">
 										<div class="d-flex flex-no-wrap justify-space-between">
 											<div>
-												<v-card-title class="text-h5"> {{ item.type }} </v-card-title>
-												<v-card-subtitle>{{ item.money }}</v-card-subtitle>
+												<v-card-title class="text-h5"> {{ product.name }} </v-card-title>
+												<v-card-subtitle>{{ product.price }}</v-card-subtitle>
 												<v-card-actions>
 													<v-text-field
-														v-model="item.quantity"
+														v-model="product.stock"
 														type="number"
 														class="ms-2"
 														variant="outlined"
@@ -41,18 +41,27 @@
 													<v-btn
 														icon="mdi mdi-menu-left"
 														size="small"
-														@click="decreaseQuantity(item)"
+														@click="decreaseQuantity(product)"
 													></v-btn>
 													<v-btn
 														icon="mdi mdi-menu-right"
 														size="small"
-														@click="increaseQuantity(item)"
+														@click="increaseQuantity(product)"
 													></v-btn>
-													<v-btn @click="removeFromCart(item.id)" size="small">Xóa</v-btn>
+													<v-btn @click="removeFromCart(product.id)" size="small">Xóa</v-btn>
 												</v-card-actions>
 											</div>
 											<v-avatar class="ma-3" size="100" rounded="0">
-												<v-img :src="item.img" cover></v-img>
+												<v-img
+													v-if="product.productPictures.length > 0"
+													:src="product.productPictures[0].url"
+													cover
+												></v-img>
+												<v-img
+													v-else
+													src="https://t4.ftcdn.net/jpg/05/41/46/75/360_F_541467587_GfiiQ3H085d1BSLzqODWCG5EoVK3z6cy.jpg"
+													cover
+												></v-img>
 											</v-avatar>
 										</div>
 									</v-card>
@@ -65,8 +74,8 @@
 										Tổng tiền:
 										{{
 											cartItems.reduce(
-												(total, item) =>
-													total + parseFloat(item.money) * parseInt(item.quantity),
+												(total, product) =>
+													total + parseFloat(product.price) * parseInt(product.stock),
 												0,
 											)
 										}}$
@@ -76,17 +85,7 @@
 									<v-divider></v-divider>
 								</v-col>
 								<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-									<v-textarea
-										bg-color="white"
-										label="Địa chỉ giao hàng"
-										rows="1"
-										auto-grow
-										variant="filled"
-									></v-textarea>
-								</v-col>
-
-								<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-									<v-btn rounded="xl">Thanh toán</v-btn>
+									<v-btn rounded="xl" @click="createOrder">Thanh toán</v-btn>
 								</v-col>
 							</v-row>
 						</v-container>
@@ -97,21 +96,15 @@
 		<v-main>
 			<v-container>
 				<v-card class="mar-top" flat>
-					<v-data-table :headers="headers" :items="desserts" :group-by="groupBy" item-value="name">
-						<template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
-							<tr>
-								<td :colspan="columns.length">
-									<VBtn
-										size="small"
-										variant="text"
-										:icon="isGroupOpen(item) ? '$expand' : '$next'"
-										@click="toggleGroup(item)"
-									></VBtn>
-									{{ item.value ? 'Contains gluten' : 'Gluten free' }}
-								</td>
-							</tr>
-						</template>
-					</v-data-table>
+					<v-data-table-server
+						v-model:items-per-page="itemsPerPage"
+						:headers="headers"
+						:items-length="totalItems"
+						:items="serverItems"
+						:loading="loading"
+						item-value="name"
+						@update:options="loadItems"
+					></v-data-table-server>
 				</v-card>
 			</v-container>
 		</v-main>
@@ -123,124 +116,52 @@
 <script setup>
 import NavBar from '../components/NavBar.vue';
 import Footer from '../components/Footer.vue';
+import orderService from '../services/order.service';
 import { useCartStore } from '../stores/cart';
 </script>
 <script>
+const FakeAPI = {
+	async fetch({ page, itemsPerPage, sortBy }) {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				const start = (page - 1) * itemsPerPage;
+				const end = start + itemsPerPage;
+				const items = orders.slice();
+
+				if (sortBy.length) {
+					const sortKey = sortBy[0].key;
+					const sortOrder = sortBy[0].order;
+					items.sort((a, b) => {
+						const aValue = a[sortKey];
+						const bValue = b[sortKey];
+						return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
+					});
+				}
+
+				const paginated = items.slice(start, end);
+
+				resolve({ items: paginated, total: items.length });
+			}, 500);
+		});
+	},
+};
+const orders = await orderService.findAllByCustomer();
+console.log(orders);
 export default {
 	data: () => ({
 		tab: null,
 		drawer: false,
-		groupBy: [
-			{
-				key: 'gluten',
-				order: 'asc',
-			},
-		],
+		itemsPerPage: 5,
 		headers: [
-			{
-				title: 'Dessert (100g serving)',
-				align: 'start',
-				sortable: false,
-				key: 'name',
-			},
-			{ title: 'Calories', key: 'calories' },
-			{ title: 'Fat (g)', key: 'fat' },
-			{ title: 'Carbs (g)', key: 'carbs' },
-			{ title: 'Protein (g)', key: 'protein' },
-			{ title: 'Iron (%)', key: 'iron' },
+			{ title: 'Tên sản phẩm', key: 'orderDetails.product.name', align: 'end' },
+			{ title: 'Giá', key: 'orderDetails.total', align: 'end' },
+			{ title: 'Số lượng', key: 'orderDetails.quantity', align: 'end' },
+			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
+			{ title: 'Trạng thái', key: 'status', align: 'end' },
 		],
-		desserts: [
-			{
-				name: 'Frozen Yogurt',
-				calories: 159,
-				fat: 6.0,
-				carbs: 24,
-				protein: 4.0,
-				iron: '1%',
-				gluten: false,
-			},
-			{
-				name: 'Ice cream sandwich',
-				calories: 237,
-				fat: 9.0,
-				carbs: 37,
-				protein: 4.3,
-				iron: '1%',
-				gluten: false,
-			},
-			{
-				name: 'Eclair',
-				calories: 262,
-				fat: 16.0,
-				carbs: 23,
-				protein: 6.0,
-				iron: '7%',
-				gluten: true,
-			},
-			{
-				name: 'Cupcake',
-				calories: 305,
-				fat: 3.7,
-				carbs: 67,
-				protein: 4.3,
-				iron: '8%',
-				gluten: true,
-			},
-			{
-				name: 'Gingerbread',
-				calories: 356,
-				fat: 16.0,
-				carbs: 49,
-				protein: 3.9,
-				iron: '16%',
-				gluten: true,
-			},
-			{
-				name: 'Jelly bean',
-				calories: 375,
-				fat: 0.0,
-				carbs: 94,
-				protein: 0.0,
-				iron: '0%',
-				gluten: false,
-			},
-			{
-				name: 'Lollipop',
-				calories: 392,
-				fat: 0.2,
-				carbs: 98,
-				protein: 0,
-				iron: '2%',
-				gluten: false,
-			},
-			{
-				name: 'Honeycomb',
-				calories: 408,
-				fat: 3.2,
-				carbs: 87,
-				protein: 6.5,
-				iron: '45%',
-				gluten: true,
-			},
-			{
-				name: 'Donut',
-				calories: 452,
-				fat: 25.0,
-				carbs: 51,
-				protein: 4.9,
-				iron: '22%',
-				gluten: true,
-			},
-			{
-				name: 'KitKat',
-				calories: 518,
-				fat: 26.0,
-				carbs: 65,
-				protein: 7,
-				iron: '6%',
-				gluten: true,
-			},
-		],
+		serverItems: [],
+		loading: true,
+		totalItems: 0,
 	}),
 	computed: {
 		user() {
@@ -253,6 +174,14 @@ export default {
 		},
 	},
 	methods: {
+		loadItems({ page, itemsPerPage, sortBy }) {
+			this.loading = true;
+			FakeAPI.fetch({ page, itemsPerPage, sortBy }).then(({ items, total }) => {
+				this.serverItems = items;
+				this.totalItems = total;
+				this.loading = false;
+			});
+		},
 		toggleDrawer() {
 			this.drawer = !this.drawer;
 		},
@@ -260,15 +189,40 @@ export default {
 			const cartStore = useCartStore();
 			cartStore.removeFromCart(id);
 		},
-		decreaseQuantity(item) {
-			if (item.quantity > 1) {
-				item.quantity--;
+		decreaseQuantity(product) {
+			if (product.stock > 1) {
+				product.stock--;
 			} else {
 				this.removeFromCart(item.id);
 			}
 		},
-		increaseQuantity(item) {
-			item.quantity++;
+		increaseQuantity(product) {
+			product.stock++;
+		},
+		async createOrder() {
+			const cartStore = useCartStore();
+			if (!this.user) {
+				alert('Vui lòng đăng nhập');
+				return;
+			}
+			if (cartStore.getCartItems.length === 0) {
+				alert('Giỏ hàng trống');
+				return;
+			}
+			if (!this.user.address || !this.user.phone) {
+				alert('Vui lòng cập nhật địa chỉ và số điện thoại');
+				return;
+			}
+			const order = {
+				products: cartStore.getCartItems,
+				total: cartStore.getCartItems.reduce(
+					(total, product) => total + parseFloat(product.price) * parseInt(product.stock),
+					0,
+				),
+			};
+			const payment = await orderService.makePayment(order);
+			cartStore.clearCart();
+			alert('Thanh toán thành công!');
 		},
 	},
 };

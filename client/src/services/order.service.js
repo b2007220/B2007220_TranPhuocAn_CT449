@@ -30,6 +30,9 @@ class OrderService {
 	async makePayment(data) {
 		return await this.#client.post('make-payment', data);
 	}
+	async findAllByCustomer() {
+		return await this.#client.get('customer');
+	}
 }
 
 export default new OrderService();
