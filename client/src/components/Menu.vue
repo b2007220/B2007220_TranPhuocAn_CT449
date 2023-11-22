@@ -15,30 +15,46 @@
 
 <script>
 import { useAuthStore } from '../stores';
+import employeeService from '../services/employee.service';
 export default {
 	data: () => ({
 		items: [
 			{ title: 'Thông tin cá nhân' },
-			{ title: 'Đổi mật khẩu' },
 			{ title: 'Lịch sử mua hàng' },
 			{ title: 'Đăng xuất' },
+			{ title: 'Trang quản trị' },
 		],
 	}),
 	methods: {
-		handleItemClick(item) {
+		async handleItemClick(item) {
 			if (item.title === 'Đăng xuất') {
 				this.logout();
-			} else {
+			} else if (item.title === 'Trang quản trị') {
+				try {
+					const employee = await employeeService.isEmployee();
+					if (employee) {
+						this.$router.push('/admin');
+					}
+				} catch (error) {
+					alert('Bạn không có quyền truy cập');
+				}
+			} else if (item.title === 'Thông tin cá nhân') {
+				this.$router.push('/profile');
+			} else if (item.title === 'Lịch sử mua hàng') {
+				this.$router.push('/order');
 			}
 		},
 		logout() {
-			alert('Đăng xuất thành công');
 			const authStore = useAuthStore();
 			if (authStore) {
 				authStore.logout();
 			} else {
 				console.error('Auth store not available');
 			}
+			alert('Đăng xuất thành công');
+		},
+		async isEmployee() {
+			return employee;
 		},
 	},
 };

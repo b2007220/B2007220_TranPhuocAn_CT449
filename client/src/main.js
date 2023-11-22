@@ -7,7 +7,7 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import './style.css';
-
+import { useCartStore } from './stores/cart';
 import { createPinia } from 'pinia';
 import { useAuthStore } from './stores';
 
@@ -25,6 +25,10 @@ const persistedState = localStorage.getItem('authStore');
 if (persistedState) {
 	useAuthStore().$state = JSON.parse(persistedState);
 }
+
+const cartStore = useCartStore();
+cartStore.loadCartFromLocalStorage();
+
 app.use(vuetify);
 registerPlugins(app);
 app.mount('#app');

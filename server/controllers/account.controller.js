@@ -30,7 +30,7 @@ class AccountController {
 
 	async update(req, res, next) {
 		try {
-			const account = await accountService.update(req.params.id, req.body);
+			const account = await accountService.update(req.user.id, req.body);
 			res.send(account);
 		} catch (error) {
 			next(error);
@@ -42,6 +42,14 @@ class AccountController {
 			const account = await accountService.findOne(req.params.id);
 			if (!account) return res.status(404).send({ message: 'Account not found' });
 			res.send(await accountService.delete(req.params.id));
+		} catch (error) {
+			next(error);
+		}
+	}
+	async updatePassword(req, res, next) {
+		try {
+			const account = await accountService.updatePassword(req.user.id, req.body.password);
+			res.send(account);
 		} catch (error) {
 			next(error);
 		}

@@ -4,7 +4,7 @@ class ProductPictureService {
 	#client;
 
 	constructor() {
-		this.#client = createClient('product-picture');
+		this.#client = createClient('product-picture/');
 	}
 
 	async getAll() {

@@ -26,6 +26,11 @@ class EmployeeService {
 	async delete(id) {
 		return await this.#client.delete(id);
 	}
+
+	async isEmployee() {
+		const employee = await this.#client.get('/is-employee');
+		return employee;
+	}
 }
 
 export default new EmployeeService();

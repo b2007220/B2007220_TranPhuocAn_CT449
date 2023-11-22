@@ -4,7 +4,7 @@ class CustomerService {
 	#client;
 
 	constructor() {
-		this.#client = createClient('customer');
+		this.#client = createClient('customer/');
 	}
 
 	async getAll() {

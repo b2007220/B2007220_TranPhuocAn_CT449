@@ -7,7 +7,7 @@ class ProductPictureService {
 	}
 
 	async create(productPicture) {
-		const newProductPicture = await this.#client.productpicture.create({ data: productPicture });
+		const newProductPicture = await this.#client.producpicture.create({ data: productPicture });
 		return newProductPicture;
 	}
 

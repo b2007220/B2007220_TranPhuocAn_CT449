@@ -14,7 +14,7 @@
 				<v-layout>
 					<v-app-bar color="teal-darken-4">
 						<template v-slot:image>
-							<v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
+							<v-img style="background-color: #4F493F;"></v-img>
 						</template>
 						<v-app-bar-title>Giỏ hàng</v-app-bar-title>
 						<v-spacer></v-spacer>
@@ -61,7 +61,7 @@
 									<v-divider></v-divider>
 								</v-col>
 								<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-									<h3 class="text-h5">
+									<h3 class="text-h5" >
 										Tổng tiền:
 										{{
 											cartItems.reduce(
@@ -97,7 +97,7 @@
 		<v-main>
 			<v-container>
 				<v-card class="mar-top" flat>
-					<v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+					<v-tabs v-model="tab" color="#6A6F4C" align-tabs="center">
 						<v-tab :value="1">Mới nhất</v-tab>
 						<v-tab :value="2">Giá thấp đến cao</v-tab>
 						<v-tab :value="3">Giá cao đến thấp</v-tab>
@@ -159,9 +159,10 @@ export default {
 		},
 	},
 };
+
 </script>
 <style scoped>
 .mar-top {
-	margin-top: 250px;
+	margin-top: 290px;
 }
 </style>

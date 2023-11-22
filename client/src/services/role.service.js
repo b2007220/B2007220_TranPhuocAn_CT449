@@ -4,7 +4,7 @@ class RoleService {
 	#client;
 
 	constructor() {
-		this.#client = createClient('role');
+		this.#client = createClient('role/');
 	}
 
 	async getAll() {

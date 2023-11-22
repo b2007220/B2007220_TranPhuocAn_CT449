@@ -21,7 +21,7 @@ class EmployeeController {
 
 	async findOne(req, res, next) {
 		try {
-			const employee = await employeeService.findOne(req.params.id);
+			const employee = await employeeService.findOne(req.user.id);
 			res.send(employee);
 		} catch (error) {
 			next(error);
@@ -42,6 +42,15 @@ class EmployeeController {
 			const employee = await employeeService.findOne(req.params.id);
 			if (!employee) return res.status(404).send({ message: 'Employee not found' });
 			res.send(await employeeService.delete(req.params.id));
+		} catch (error) {
+			next(error);
+		}
+	}
+	async isEmployee(req, res, next) {
+		try {
+			const employee = await employeeService.findOne(req.user.id);
+			if (!employee) return res.status(404).send({ message: 'Employee not found' });
+			res.send(employee);
 		} catch (error) {
 			next(error);
 		}

@@ -14,7 +14,7 @@
 				<v-layout>
 					<v-app-bar color="teal-darken-4">
 						<template v-slot:image>
-							<v-img style="background-color: #4F493F;"></v-img>
+							<v-img style="background-color: #4f493f"></v-img>
 						</template>
 						<v-app-bar-title>Giỏ hàng</v-app-bar-title>
 						<v-spacer></v-spacer>
@@ -97,76 +97,139 @@
 		<v-main>
 			<v-container>
 				<v-card class="mar-top" flat>
-					<v-container fluid>
-						<v-row>
-							<v-col cols="12" sm="7">
-								<v-carousel>
-									<v-carousel-item
-										v-for="(item, i) in product.urls"
-										:key="i"
-										:src="item"
-										cover
-									></v-carousel-item>
-								</v-carousel>
-							</v-col>
-							<v-col cols="12" sm="5">
-								<v-app-bar-title>Thông tin sản phẩm</v-app-bar-title>
-								<v-card-title>Card Title</v-card-title>
-								<v-card-subtitle>Subtitle</v-card-subtitle>
-								<v-card-text>
+					<v-row>
+						<v-col cols="12" sm="7">
+							<v-form @submit.prevent="updateUser">
+								<v-text-field v-model="user.fullName" label="Họ tên" required></v-text-field>
+
+								<v-text-field v-model="user.username" label="Gmail" disabled></v-text-field>
+
+								<v-text-field v-model="user.phone" label="Số điện thoại" required></v-text-field>
+
+								<v-text-field v-model="user.address" label="Địa chỉ" required></v-text-field>
+								<v-btn class="me-4" type="submit" color="#806044"> Xác nhận </v-btn>
+							</v-form>
+						</v-col>
+						<v-col cols="12" sm="5">
+							<v-template v-if="!isSetPassword">
+								<v-form @submit.prevent="createPassword">
+									<v-text-field v-model="user.password" label="Mật khẩu" required></v-text-field>
 									<v-text-field
-										v-model="product.quantity"
-										type="number"
-										class="ms-2"
-										variant="outlined"
-										density="compact"
-										:min="1"
-									>
-									</v-text-field>
-									<v-btn
-										icon="mdi mdi-menu-left"
-										size="small"
-										@click="decreaseQuantity(product)"
-									></v-btn>
-									<v-btn
-										icon="mdi mdi-menu-right"
-										size="small"
-										@click="increaseQuantity(product)"
-									></v-btn>
-								</v-card-text>
-							</v-col>
-						</v-row>
-					</v-container>
+										v-model="user.passwordConfirm"
+										label="Nhập lại mật khẩu"
+										required
+									></v-text-field>
+									<v-btn class="me-4" type="submit" color="#806044">Tạo mật khẩu</v-btn>
+								</v-form>
+							</v-template>
+							<v-template v-else>
+								<v-form @submit.prevent="updatePassword">
+									<v-text-field
+										v-model="user.oldPassword"
+										label="Mật khẩu cũ"
+										required
+									></v-text-field>
+									<v-text-field
+										v-model="user.updatePassword"
+										label="Mật khẩu mới"
+										required
+									></v-text-field>
+									<v-text-field
+										v-model="user.updatePasswordConfirm"
+										label="Nhập lại mật khẩu mới"
+										required
+									></v-text-field>
+									<v-btn class="me-4" type="submit" color="#806044">Đổi mật khẩu</v-btn>
+								</v-form>
+							</v-template>
+						</v-col>
+					</v-row>
 				</v-card>
 			</v-container>
 		</v-main>
+		<v-divider></v-divider>
 		<Footer />
 	</v-app>
 </template>
 
-<script setup>
+<script>
+import { defineComponent, reactive } from 'vue';
 import NavBar from '../components/NavBar.vue';
 import Footer from '../components/Footer.vue';
 import { useCartStore } from '../stores/cart';
-import { ref, onMounted } from 'vue';
-import productService from '../services/product.service';
-const product = ref(null);
-onMounted(async () => {
-	const productId = $route.params.id;
-	product = await productService.getOne(productId);
-});
-</script>
-<script>
+import { useAuthStore } from '../stores/';
+import accountService from '../services/account.service';
 export default {
-	data: () => ({
-		tab: null,
-		drawer: false,
-	}),
+	components: {
+		NavBar,
+		Footer,
+	},
+	setup() {
+		const authStore = useAuthStore();
+		const user = reactive({
+			fullName: authStore.getUser.fullName || '',
+			username: authStore.getUser.username || '',
+			phone: authStore.getUser.phone || '',
+			address: authStore.getUser.address || '',
+			password: '',
+			isSetPassword: authStore.getUser.password ? true : false,
+			passwordConfirm: '',
+			oldPassword: '',
+		});
+
+		const updateUser = async () => {
+			try {
+				const updateUser = await accountService.update(user);
+				authStore.setUser(updateUser);
+				alert('Cập nhật thành công');
+			} catch (error) {
+				console.error('Error updating profile:', error.message);
+			}
+		};
+		const createPassword = async () => {
+			try {
+				if (user.password !== user.passwordConfirm) {
+					alert('Mật khẩu không khớp');
+					return;
+				}
+				const updateUser = await accountService.updatePassword({ password: user.password });
+				authStore.setUser(updateUser);
+				alert('Cập nhật thành công');
+			} catch (error) {
+				console.error('Error updating profile:', error.message);
+			}
+		};
+		const updatePassword = async () => {
+			try {
+				if (user.updatePassword !== user.updatePasswordConfirm) {
+					alert('Mật khẩu không khớp');
+					return;
+				}
+				if (user.oldPassword !== authStore.getUser.password) {
+					alert('Mật khẩu cũ không đúng');
+					return;
+				}
+				const updateUser = await accountService.updatePassword(updatePassword);
+				authStore.setUser(updateUser);
+				alert('Cập nhật thành công');
+			} catch (error) {
+				console.error('Error updating profile:', error.message);
+			}
+		};
+		return {
+			user,
+			updateUser,
+			createPassword,
+			updatePassword,
+		};
+	},
+	data() {
+		return {
+			tab: null,
+			drawer: false,
+		};
+	},
 	computed: {
-		user() {
-			const authStore = useAuthStore();
-			return authStore.getUser;
-		},
 		cartItems() {
 			const cartStore = useCartStore();
 			return cartStore.getCartItems;
@@ -193,6 +256,7 @@ export default {
 	},
 };
 </script>
+
 <style scoped>
 .mar-top {
 	margin-top: 290px;

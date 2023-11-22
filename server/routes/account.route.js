@@ -2,8 +2,8 @@ const router = require('express').Router();
 
 const accountController = require('../controllers/account.controller');
 
-router.route('/').post(accountController.create).get(accountController.findAll);
-
-router.route('/:id').get(accountController.findOne).put(accountController.update).delete(accountController.delete);
+router.route('/').post(accountController.create).get(accountController.findAll).put(accountController.update);
+router.route('/password').put(accountController.updatePassword);
+router.route('/:id').get(accountController.findOne).delete(accountController.delete);
 
 module.exports = router;

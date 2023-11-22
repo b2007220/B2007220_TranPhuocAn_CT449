@@ -2,7 +2,7 @@
 	<div
 		class="image shape"
 		style="
-			background: url('https://png.pngtree.com/background/20230528/original/pngtree-images-of-candles-jars-and-books-sitting-on-the-windowsill-picture-image_2773091.jpg');
+			background: url('https://www.usmagazine.com/wp-content/uploads/2021/10/fall-candle-cozy.jpg?w=1000&h=563&crop=1&quality=86&strip=all');
 			background-position: center;
 			background-size: cover;
 			position: absolute;
@@ -23,10 +23,10 @@
 		</v-app-bar>
 		<v-row>
 			<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-				<h1 class="top text-white"><strong>NẾN NHÀ AN</strong></h1>
+				<h1 class="top text-white" style="font-size: 50px"><strong>NẾN NHÀ AN</strong></h1>
 			</v-col>
 			<v-col cols="12" sm="12" class="d-flex justify-center align-center">
-				<v-btn rounded="xl" class="tope" to="/">Trang chủ</v-btn>
+				<v-btn rounded="xl" class="tope" to="/" color="#EDE1D2" size="large">Trang chủ</v-btn>
 			</v-col>
 		</v-row>
 	</div>

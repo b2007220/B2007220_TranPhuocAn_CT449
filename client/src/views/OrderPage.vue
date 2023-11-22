@@ -97,49 +97,25 @@
 		<v-main>
 			<v-container>
 				<v-card class="mar-top" flat>
-					<v-container fluid>
-						<v-row>
-							<v-col cols="12" sm="7">
-								<v-carousel>
-									<v-carousel-item
-										v-for="(item, i) in product.urls"
-										:key="i"
-										:src="item"
-										cover
-									></v-carousel-item>
-								</v-carousel>
-							</v-col>
-							<v-col cols="12" sm="5">
-								<v-app-bar-title>Thông tin sản phẩm</v-app-bar-title>
-								<v-card-title>Card Title</v-card-title>
-								<v-card-subtitle>Subtitle</v-card-subtitle>
-								<v-card-text>
-									<v-text-field
-										v-model="product.quantity"
-										type="number"
-										class="ms-2"
-										variant="outlined"
-										density="compact"
-										:min="1"
-									>
-									</v-text-field>
-									<v-btn
-										icon="mdi mdi-menu-left"
+					<v-data-table :headers="headers" :items="desserts" :group-by="groupBy" item-value="name">
+						<template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
+							<tr>
+								<td :colspan="columns.length">
+									<VBtn
 										size="small"
-										@click="decreaseQuantity(product)"
-									></v-btn>
-									<v-btn
-										icon="mdi mdi-menu-right"
-										size="small"
-										@click="increaseQuantity(product)"
-									></v-btn>
-								</v-card-text>
-							</v-col>
-						</v-row>
-					</v-container>
+										variant="text"
+										:icon="isGroupOpen(item) ? '$expand' : '$next'"
+										@click="toggleGroup(item)"
+									></VBtn>
+									{{ item.value ? 'Contains gluten' : 'Gluten free' }}
+								</td>
+							</tr>
+						</template>
+					</v-data-table>
 				</v-card>
 			</v-container>
 		</v-main>
+		<v-divider></v-divider>
 		<Footer />
 	</v-app>
 </template>
@@ -148,19 +124,123 @@
 import NavBar from '../components/NavBar.vue';
 import Footer from '../components/Footer.vue';
 import { useCartStore } from '../stores/cart';
-import { ref, onMounted } from 'vue';
-import productService from '../services/product.service';
-const product = ref(null);
-onMounted(async () => {
-	const productId = $route.params.id;
-	product = await productService.getOne(productId);
-});
 </script>
 <script>
 export default {
 	data: () => ({
 		tab: null,
 		drawer: false,
+		groupBy: [
+			{
+				key: 'gluten',
+				order: 'asc',
+			},
+		],
+		headers: [
+			{
+				title: 'Dessert (100g serving)',
+				align: 'start',
+				sortable: false,
+				key: 'name',
+			},
+			{ title: 'Calories', key: 'calories' },
+			{ title: 'Fat (g)', key: 'fat' },
+			{ title: 'Carbs (g)', key: 'carbs' },
+			{ title: 'Protein (g)', key: 'protein' },
+			{ title: 'Iron (%)', key: 'iron' },
+		],
+		desserts: [
+			{
+				name: 'Frozen Yogurt',
+				calories: 159,
+				fat: 6.0,
+				carbs: 24,
+				protein: 4.0,
+				iron: '1%',
+				gluten: false,
+			},
+			{
+				name: 'Ice cream sandwich',
+				calories: 237,
+				fat: 9.0,
+				carbs: 37,
+				protein: 4.3,
+				iron: '1%',
+				gluten: false,
+			},
+			{
+				name: 'Eclair',
+				calories: 262,
+				fat: 16.0,
+				carbs: 23,
+				protein: 6.0,
+				iron: '7%',
+				gluten: true,
+			},
+			{
+				name: 'Cupcake',
+				calories: 305,
+				fat: 3.7,
+				carbs: 67,
+				protein: 4.3,
+				iron: '8%',
+				gluten: true,
+			},
+			{
+				name: 'Gingerbread',
+				calories: 356,
+				fat: 16.0,
+				carbs: 49,
+				protein: 3.9,
+				iron: '16%',
+				gluten: true,
+			},
+			{
+				name: 'Jelly bean',
+				calories: 375,
+				fat: 0.0,
+				carbs: 94,
+				protein: 0.0,
+				iron: '0%',
+				gluten: false,
+			},
+			{
+				name: 'Lollipop',
+				calories: 392,
+				fat: 0.2,
+				carbs: 98,
+				protein: 0,
+				iron: '2%',
+				gluten: false,
+			},
+			{
+				name: 'Honeycomb',
+				calories: 408,
+				fat: 3.2,
+				carbs: 87,
+				protein: 6.5,
+				iron: '45%',
+				gluten: true,
+			},
+			{
+				name: 'Donut',
+				calories: 452,
+				fat: 25.0,
+				carbs: 51,
+				protein: 4.9,
+				iron: '22%',
+				gluten: true,
+			},
+			{
+				name: 'KitKat',
+				calories: 518,
+				fat: 26.0,
+				carbs: 65,
+				protein: 7,
+				iron: '6%',
+				gluten: true,
+			},
+		],
 	}),
 	computed: {
 		user() {

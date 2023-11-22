@@ -23,11 +23,18 @@ class AccountService {
 
 	async update(id, account) {
 		const updatedAccount = await this.#client.account.update({ where: { id }, data: account });
-		return updatedaccount;
+		console.log(updatedAccount);
+		return updatedAccount;
 	}
 
 	async delete(id) {
 		return await this.#client.account.delete({ where: { id } });
+	}
+	
+	async updatePassword(id, password) {
+		const updatedAccount = await this.#client.account.update({ where: { id }, data: { password } });
+		console.log(updatedAccount);
+		return updatedAccount;
 	}
 }
 module.exports = new AccountService();

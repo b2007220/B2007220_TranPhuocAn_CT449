@@ -31,12 +31,11 @@
 				</v-col>
 				<v-col cols="12" xs="12" sm="6" md="4">
 					<v-card-text class="white--text pt-0">
-						<h3>Liên hệ</h3>
+						<h3>Contact</h3>
 					</v-card-text>
 					<v-card-text class="grey--text">Facebook</v-card-text>
-					<v-card-text class="grey--text mt-n4">Gmail: anb2007220@gmail.com </v-card-text>
-					<v-card-text class="grey--text mt-n4">SĐT: 0931058137</v-card-text>
-					<v-card-text class="grey--text mt-n4">Hỗ trợ</v-card-text>
+					<v-card-text class="grey--text mt-n4">Gmail: anb2007220@student.ctu.edu.vn </v-card-text>
+					<v-card-text class="grey--text mt-n4">Phone: 0931058137</v-card-text>
 				</v-col>
 			</v-row>
 		</v-card>

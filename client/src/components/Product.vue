@@ -2,7 +2,9 @@
 	<v-row>
 		<v-col cols="12" sm="4" v-for="(product, i) in products" :key="1">
 			<v-card class="mx-auto" max-width="344">
-				<v-img :src="product.img" height="200px" cover></v-img>
+				<router-link :to="{ name: 'product', params: { id: product.id } }">
+					<v-img :src="product.img" height="200px" cover></v-img>
+				</router-link>
 				<v-divider></v-divider>
 				<v-card-title>
 					{{ product.type }}
@@ -20,12 +22,13 @@
 <script setup>
 import { useCartStore } from '../stores/cart';
 import productService from '../services/product.service';
+
 </script>
 <script>
 export default {
 	data: () => ({
 		products: [],
-		sortByL: null,
+		sortBy: null,
 	}),
 	async created() {
 		try {

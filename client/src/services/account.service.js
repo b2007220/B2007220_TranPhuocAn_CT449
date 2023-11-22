@@ -18,13 +18,16 @@ class AccountService {
 	async create(data) {
 		return await this.#client.post('', data);
 	}
-
-	async update(id, data) {
-		return await this.#client.put(id, data);
+	async update(data) {
+		const user = await this.#client.put('/',data)
+		return user;
 	}
-
 	async delete(id) {
 		return await this.#client.delete(id);
+	}
+	async updatePassword(data){
+		const user = await this.#client.put('/password',data);
+		return user;
 	}
 }
 

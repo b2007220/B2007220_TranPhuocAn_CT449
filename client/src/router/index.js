@@ -10,9 +10,19 @@ const routes = [
 				component: () => import('../views/Home.vue'),
 			},
 			{
-				path: '/product',
+				path: '/product/:id',
 				name: 'Details',
 				component: () => import('../views/ProductDetail.vue'),
+			},
+			{
+				path: '/order',
+				name: 'Order',
+				component: () => import('../views/OrderPage.vue'),
+			},
+			{
+				path: '/profile',
+				name: 'Profile',
+				component: () => import('../views/Profile.vue'),
 			},
 		],
 	},
@@ -22,8 +32,18 @@ const routes = [
 		children: [
 			{
 				path: '',
-				name: 'Admin',
-				component: () => import('../views/AdminPage.vue'),
+				name: 'AdminAccount',
+				component: () => import('../views/AdminAccount.vue'),
+			},
+			{
+				path: '/admin/product',
+				name: 'AdminProduct',
+				component: () => import('../views/AdminProduct.vue'),
+			},
+			{
+				path: '/order',
+				name: 'AdminOrder',
+				component: () => import('../views/AdminOrder.vue'),
 			},
 		],
 	},

@@ -1,11 +1,11 @@
 <template>
-	<v-app id="inspire" :style="{ background: '#ced6e0' }">
+	<v-app id="inspire" :style="{ background: '#E3DED1' }">
 		<SideBar />
 		<v-main>
 			<v-container class="px-6 mt-n2" fluid>
 				<v-row>
 					<v-col cols="12" sm="6">
-						<v-card color="#00cec9" theme="dark" class="rounded-xl" height="100">
+						<v-card color="#908471" theme="dark" class="rounded-xl" height="100">
 							<div class="d-flex flex-no-wrap justify-space-between">
 								<div>
 									<v-card-title class="text-h5 mt-3">Doanh thu trong tháng</v-card-title>
@@ -15,7 +15,7 @@
 						</v-card>
 					</v-col>
 					<v-col cols="12" sm="6">
-						<v-card color="#00cec9" theme="dark" class="rounded-xl" height="100">
+						<v-card color="#908471" theme="dark" class="rounded-xl" height="100">
 							<div class="d-flex flex-no-wrap justify-space-between">
 								<div>
 									<v-card-title class="text-h5 mt-3">Sản phẩm bán được trong tháng</v-card-title>
@@ -27,7 +27,7 @@
 					
 					
 					<v-col cols="12" sm="12" class="mt-n4">
-						<v-card class="mx-auto border rounded p-" max-width="100%">
+						<v-card class="mx-auto border rounded p-" max-width="100%" >
 							<v-data-table-server
 								v-model:items-per-page="itemsPerPage"
 								:headers="headers"

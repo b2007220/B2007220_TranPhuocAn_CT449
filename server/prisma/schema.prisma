@@ -34,17 +34,18 @@ enum Role {
 }
 
 model Employee {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  role      Role    @default(EMPLOYEE)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role     @default(EMPLOYEE)
   orders    Order[]
-  accountId String  @db.ObjectId
-  account   Account @relation(fields: [accountId], references: [id])
+  accountId String?  @db.ObjectId
+  account   Account? @relation(fields: [accountId], references: [id])
 }
 
 enum Status {
   PENDING
   DELIVERING
   DELIVERED
+  UNACCEPTED
 }
 
 model Order {
@@ -68,14 +69,14 @@ model ProductPicture {
 }
 
 model Product {
-  id           String           @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  price        Float
-  description  String?
-  stock        Int
-  notes        String?
-  pictures     ProductPicture[]
-  orderDetails OrderDetail[]
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  price           Float
+  description     String?
+  stock           Int
+  notes           String?
+  productPictures ProductPicture[]
+  orderDetails    OrderDetail[]
 }
 
 model OrderDetail {
