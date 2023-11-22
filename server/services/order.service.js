@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, Status } = require('@prisma/client');
 
 class OrderService {
 	#client;
@@ -15,21 +15,21 @@ class OrderService {
 		const orders = await this.#client.order.findMany({
 			include: {
 				customer: {
-					include:{
-						account: true
-					}
+					include: {
+						account: true,
+					},
 				},
 				employee: {
-					include:{
-						account: true
-					}
+					include: {
+						account: true,
+					},
 				},
 				orderDetails: {
 					include: {
-						product: true
-					}
-				}
-			}
+						product: true,
+					},
+				},
+			},
 		});
 		return orders;
 	}
@@ -38,21 +38,21 @@ class OrderService {
 			where: { customerId: customerId },
 			include: {
 				customer: {
-					include:{
-						account: true
-					}
+					include: {
+						account: true,
+					},
 				},
 				employee: {
-					include:{
-						account: true
-					}
+					include: {
+						account: true,
+					},
 				},
 				orderDetails: {
 					include: {
-						product: true
-					}
-				}
-			}
+						product: true,
+					},
+				},
+			},
 		});
 		return orders;
 	}
@@ -69,6 +69,17 @@ class OrderService {
 	async delete(id) {
 		return await this.#client.order.delete({ where: { id } });
 	}
-
+	async acceptOrder(id) {
+		const order = await this.#client.order.update({ where: { id }, data: { status: Status.DELIVERING } });
+		return order;
+	}
+	async rejectOrder(id) {
+		const order = await this.#client.order.update({ where: { id }, data: { status: Status.UNACCEPTED } });
+		return order;
+	}
+	async completeOrder(id) {
+		const order = await this.#client.order.update({ where: { id }, data: { status: Status.DELIVERED } });
+		return order;
+	}
 }
 module.exports = new OrderService();

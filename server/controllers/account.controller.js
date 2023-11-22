@@ -1,5 +1,5 @@
 const accountService = require('../services/account.service');
-
+const employeeService = require('../services/employee.service');
 class AccountController {
 	async create(req, res, next) {
 		try {
@@ -50,6 +50,16 @@ class AccountController {
 		try {
 			const account = await accountService.updatePassword(req.user.id, req.body.password);
 			res.send(account);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async addAdmin(req, res, next) {
+		try {
+			const user = await accountService.update(req.body.id, { isEmployee: true });
+			const employee = await employeeService.create({ accountId: user.id });
+			res.send(employee);
 		} catch (error) {
 			next(error);
 		}

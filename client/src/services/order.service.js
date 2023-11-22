@@ -33,6 +33,15 @@ class OrderService {
 	async findAllByCustomer() {
 		return await this.#client.get('customer');
 	}
+	async acceptOrder(id) {
+		return await this.#client.put(`accept/${id}`);
+	}
+	async rejectOrder(id) {
+		return await this.#client.put(`reject/${id}`);
+	}
+	async completeOrder(id) {
+		return await this.#client.put(`complete/${id}`);
+	}
 }
 
 export default new OrderService();

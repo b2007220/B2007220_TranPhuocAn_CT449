@@ -12,7 +12,11 @@
 						:loading="loading"
 						item-value="name"
 						@update:options="loadItems"
-					></v-data-table-server>
+					>
+						<template #item.edit="{ item }">
+							<v-btn icon="mdi mdi-account-circle" @click="addAdmin(item)"></v-btn>
+						</template>
+					</v-data-table-server>
 				</v-card>
 			</v-container>
 		</v-main>
@@ -22,6 +26,16 @@
 <script setup>
 import SideBar from '../components/SideBar.vue';
 import accountService from '../services/account.service';
+
+const addAdmin = async (user) => {
+	try {
+		const res = await accountService.addAdmin(user.id);
+
+		alert('Thêm quyền quản trị thành công');
+	} catch (error) {
+		console.log(error);
+	}
+};
 </script>
 <script>
 const FakeAPI = {
@@ -67,7 +81,7 @@ export default {
 			{ title: 'Ngày tạo', key: 'createdAt', align: 'end' },
 			{ title: 'Ngày cập nhật', key: 'updatedAt', align: 'end' },
 			{ title: 'Nhân viên', key: 'isEmployee', align: 'end' },
-			{ title: 'Chỉnh sửa', key: 'status', align: 'end' },
+			{ title: 'Chỉnh sửa', key: 'edit', align: 'end' },
 		],
 		serverItems: [],
 		loading: true,

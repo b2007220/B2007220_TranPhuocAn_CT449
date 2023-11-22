@@ -22,8 +22,11 @@ class AccountService {
 	}
 
 	async update(id, account) {
-		const updatedAccount = await this.#client.account.update({ where: { id }, data: account });
-		console.log(updatedAccount);
+		const updatedAccount = await this.#client.account.update({ where: { id }, data: {
+			fullName: account.fullName,
+			phone: account.phone,
+			address: account.address,
+		} });
 		return updatedAccount;
 	}
 

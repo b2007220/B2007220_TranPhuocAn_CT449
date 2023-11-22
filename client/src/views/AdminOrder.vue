@@ -34,6 +34,10 @@
 								:loading="loading"
 								item-value="name"
 								@update:options="loadItems"
+								><template #item.edit="{ item }">
+									<v-btn icon="mdi mdi-cancel" @click="rejectOrder(item)"></v-btn>
+									<v-btn icon="mdi mdi-check" @click="acceptOrder(item)"></v-btn>
+									<v-btn icon="mdi mdi-check-all" @click="completeOrder(item)"></v-btn></template
 							></v-data-table-server>
 						</v-card>
 					</v-col>
@@ -46,6 +50,33 @@
 <script setup>
 import SideBar from '../components/SideBar.vue';
 import orderService from '../services/order.service';
+const rejectOrder = async (order) => {
+	try {
+		const res = await orderService.rejectOrder(order.id);
+
+		alert('Từ chối đơn hàng thành công');
+	} catch (error) {
+		console.log(error);
+	}
+};
+const acceptOrder = async (order) => {
+	try {
+		const res = await orderService.acceptOrder(order.id);
+
+		alert('Đã duyệt đơn hàng thành công');
+	} catch (error) {
+		console.log(error);
+	}
+};
+const completeOrder = async (order) => {
+	try {
+		const res = await orderService.completeOrder(order.id);
+
+		alert('Đã hoàn thành đơn hàng');
+	} catch (error) {
+		console.log(error);
+	}
+};
 </script>
 <script>
 const FakeAPI = {
@@ -92,6 +123,7 @@ export default {
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
 			{ title: 'Nhân viên phụ trách', key: 'employee.account.fullName', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
+			{ title: 'Chỉnh sửa', key: 'edit', align: 'end' },
 		],
 		serverItems: [],
 		loading: true,

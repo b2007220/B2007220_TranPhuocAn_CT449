@@ -149,6 +149,7 @@ import Footer from '../components/Footer.vue';
 import { useCartStore } from '../stores/cart';
 import { ref, onMounted } from 'vue';
 import productService from '../services/product.service';
+import { useAuthStore } from '../stores/';
 const product = ref(null);
 onMounted(async () => {
 	const productId = $route.params.id;

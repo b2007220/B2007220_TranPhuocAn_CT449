@@ -118,6 +118,7 @@ import NavBar from '../components/NavBar.vue';
 import Footer from '../components/Footer.vue';
 import orderService from '../services/order.service';
 import { useCartStore } from '../stores/cart';
+import { useAuthStore } from '../stores/';
 </script>
 <script>
 const FakeAPI = {
