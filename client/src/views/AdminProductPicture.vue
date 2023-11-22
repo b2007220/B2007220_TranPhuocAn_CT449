@@ -39,7 +39,7 @@
 										:item-props="itemProps"
 										required
 									></v-select>
-									<v-btn color="primary" type="submit">Thêm sản phẩm</v-btn>
+									<v-btn color="#EDE1D2" type="submit">Thêm sản phẩm</v-btn>
 								</v-form>
 							</v-card-text>
 						</v-card>

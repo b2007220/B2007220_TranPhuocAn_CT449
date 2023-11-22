@@ -78,7 +78,7 @@ class OrderController {
 	}
 	async acceptOrder(req, res, next) {
 		try {
-			const order = await orderService.acceptOrder(req.params.id);
+			const order = await orderService.acceptOrder(req.params.id, req.user.id);
 			res.send(order);
 		} catch (error) {
 			next(error);
@@ -86,7 +86,7 @@ class OrderController {
 	}
 	async rejectOrder(req, res, next) {
 		try {
-			const order = await orderService.rejectOrder(req.params.id);
+			const order = await orderService.rejectOrder(req.params.id,	req.user.id);
 			res.send(order);
 		} catch (error) {
 			next(error);
@@ -94,7 +94,7 @@ class OrderController {
 	}
 	async completeOrder(req, res, next) {
 		try {
-			const order = await orderService.completeOrder(req.params.id);
+			const order = await orderService.completeOrder(req.params.id, req.user.id);
 			res.send(order);
 		} catch (error) {
 			next(error);

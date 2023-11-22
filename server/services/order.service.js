@@ -69,16 +69,25 @@ class OrderService {
 	async delete(id) {
 		return await this.#client.order.delete({ where: { id } });
 	}
-	async acceptOrder(id) {
-		const order = await this.#client.order.update({ where: { id }, data: { status: Status.DELIVERING } });
+	async acceptOrder(id, employeeId) {
+		const order = await this.#client.order.update({
+			where: { id },
+			data: { status: Status.DELIVERING, employeeId: employeeId },
+		});
 		return order;
 	}
-	async rejectOrder(id) {
-		const order = await this.#client.order.update({ where: { id }, data: { status: Status.UNACCEPTED } });
+	async rejectOrder(id, employeeId) {
+		const order = await this.#client.order.update({
+			where: { id },
+			data: { status: Status.UNACCEPTED, employeeId: employeeId },
+		});
 		return order;
 	}
-	async completeOrder(id) {
-		const order = await this.#client.order.update({ where: { id }, data: { status: Status.DELIVERED } });
+	async completeOrder(id, employeeId) {
+		const order = await this.#client.order.update({
+			where: { id },
+			data: { status: Status.DELIVERED, employeeId: employeeId },
+		});
 		return order;
 	}
 }
