@@ -147,11 +147,6 @@ const FakeAPI = {
 	},
 };
 const orders = await orderService.findAllByCustomer();
-const summaryQuantity = orders.reduce(
-	(acc, cur) => acc + cur.orderDetails.reduce((quantityAcc, orderDetail) => quantityAcc + orderDetail.quantity, 0),
-	0,
-);
-
 export default {
 	data: () => ({
 		tab: null,
@@ -160,7 +155,6 @@ export default {
 		headers: [
 			{ title: 'Tên sản phẩm', key: 'productDetails', align: 'end' },
 			{ title: 'Giá', key: 'total', align: 'end' },
-			{ title: 'Số lượng', key: 'summaryQuantity', align: 'end' },
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
 		],
