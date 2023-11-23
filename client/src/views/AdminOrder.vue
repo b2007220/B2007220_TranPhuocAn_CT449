@@ -8,7 +8,7 @@
 						v-model:items-per-page="itemsPerPage"
 						:headers="headers"
 						:items-length="totalItems"
-						:items="serverItems"
+						:items="transformedData"
 						:loading="loading"
 						item-value="name"
 						@update:options="loadItems"
@@ -80,13 +80,9 @@ const FakeAPI = {
 		});
 	},
 };
+
 const orders = await orderService.getAll();
 
-const summaryQuantity = orders.reduce(
-	(acc, cur) => acc + cur.orderDetails.reduce((quantityAcc, orderDetail) => quantityAcc + orderDetail.quantity, 0),
-	0,
-);
-const productNames = orders.map((order) => order.orderDetails.map((orderDetail) => orderDetail.product.name)).flat();
 export default {
 	data: () => ({
 		itemsPerPage: 5,
@@ -97,8 +93,7 @@ export default {
 				sortable: false,
 				key: 'customer.account.fullName',
 			},
-			{ title: 'Tên sản phẩm', key: 'orderDetails[0].product.name', align: 'end' },
-			{ title: 'Số lượng', key: 'summaryQuantity', align: 'end' },
+			{ title: 'Sản phẩm', key: 'productDetails', align: 'end' },
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
 			{ title: 'Nhân viên phụ trách', key: 'employee.account.fullName', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
@@ -107,9 +102,21 @@ export default {
 		serverItems: [],
 		loading: true,
 		totalItems: 0,
-		summaryQuantity: summaryQuantity,
-		productNames: productNames,
 	}),
+	computed: {
+		transformedData() {
+			return orders.map((item) => {
+				const productDetailsString = item.orderDetails
+					.map((orderDetail) => `Sản phẩm: ${orderDetail.product.name}, Số lượng: ${orderDetail.quantity}`)
+					.join(', ');
+
+				return {
+					...item,
+					productDetails: productDetailsString,
+				};
+			});
+		},
+	},
 	methods: {
 		loadItems({ page, itemsPerPage, sortBy }) {
 			this.loading = true;
