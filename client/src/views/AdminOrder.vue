@@ -3,45 +3,21 @@
 		<SideBar />
 		<v-main>
 			<v-container class="px-6 mt-n2" fluid>
-				<v-row>
-					<v-col cols="12" sm="6">
-						<v-card color="#908471" theme="dark" class="rounded-xl" height="100">
-							<div class="d-flex flex-no-wrap justify-space-between">
-								<div>
-									<v-card-title class="text-h5 mt-3">Doanh thu </v-card-title>
-									<v-card-subtitle>{{ summary }}</v-card-subtitle>
-								</div>
-							</div>
-						</v-card>
-					</v-col>
-					<v-col cols="12" sm="6">
-						<v-card color="#908471" theme="dark" class="rounded-xl" height="100">
-							<div class="d-flex flex-no-wrap justify-space-between">
-								<div>
-									<v-card-title class="text-h5 mt-3">Sản phẩm bán được</v-card-title>
-									<v-card-subtitle>{{ summaryProduct }}</v-card-subtitle>
-								</div>
-							</div>
-						</v-card>
-					</v-col>
-					<v-col cols="12" sm="12" class="mt-n4">
-						<v-card class="mx-auto border rounded p-" max-width="100%">
-							<v-data-table-server
-								v-model:items-per-page="itemsPerPage"
-								:headers="headers"
-								:items-length="totalItems"
-								:items="serverItems"
-								:loading="loading"
-								item-value="name"
-								@update:options="loadItems"
-								><template #item.edit="{ item }">
-									<v-btn icon="mdi mdi-cancel" @click="rejectOrder(item)"></v-btn>
-									<v-btn icon="mdi mdi-check" @click="acceptOrder(item)"></v-btn>
-									<v-btn icon="mdi mdi-check-all" @click="completeOrder(item)"></v-btn></template
-							></v-data-table-server>
-						</v-card>
-					</v-col>
-				</v-row>
+				<v-card class="mx-auto border rounded p-" max-width="100%">
+					<v-data-table-server
+						v-model:items-per-page="itemsPerPage"
+						:headers="headers"
+						:items-length="totalItems"
+						:items="serverItems"
+						:loading="loading"
+						item-value="name"
+						@update:options="loadItems"
+						><template #item.edit="{ item }">
+							<v-btn icon="mdi mdi-cancel" @click="rejectOrder(item)"></v-btn>
+							<v-btn icon="mdi mdi-check" @click="acceptOrder(item)"></v-btn>
+							<v-btn icon="mdi mdi-check-all" @click="completeOrder(item)"></v-btn></template
+					></v-data-table-server>
+				</v-card>
 			</v-container>
 		</v-main>
 	</v-app>
@@ -106,8 +82,6 @@ const FakeAPI = {
 };
 const orders = await orderService.getAll();
 
-const summary = orders.reduce((acc, cur) => acc + cur.total, 0);
-const summaryProduct = orders.reduce((acc, cur) => acc + cur.orderDetails.quantity, 0);
 const summaryQuantity = orders.reduce(
 	(acc, cur) => acc + cur.orderDetails.reduce((quantityAcc, orderDetail) => quantityAcc + orderDetail.quantity, 0),
 	0,
@@ -123,10 +97,10 @@ export default {
 				sortable: false,
 				key: 'customer.account.fullName',
 			},
-			{ title: 'Tên sản phẩm', key: 'productNames', align: 'end' },
+			{ title: 'Tên sản phẩm', key: 'orderDetails[0].product.name', align: 'end' },
 			{ title: 'Số lượng', key: 'summaryQuantity', align: 'end' },
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
-			{ title: 'Nhân viên phụ trách', key: 'employee[0].account.fullName', align: 'end' },
+			{ title: 'Nhân viên phụ trách', key: 'employee.account.fullName', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
 			{ title: 'Chỉnh sửa', key: 'edit', align: 'end' },
 		],

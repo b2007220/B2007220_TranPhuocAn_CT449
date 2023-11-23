@@ -2,6 +2,7 @@ const orderService = require('../services/order.service');
 const productService = require('../services/product.service');
 const orderDetailService = require('../services/orderdetail.service');
 const customerService = require('../services/customer.service');
+const employeeService = require('../services/employee.service');
 class OrderController {
 	async create(req, res, next) {
 		try {
@@ -81,7 +82,8 @@ class OrderController {
 	}
 	async acceptOrder(req, res, next) {
 		try {
-			const order = await orderService.acceptOrder(req.params.id, req.user.id);
+			const employee = await employeeService.findOne(req.user.id);
+			const order = await orderService.acceptOrder(req.params.id, employee.id);
 			res.send(order);
 		} catch (error) {
 			next(error);
@@ -89,7 +91,8 @@ class OrderController {
 	}
 	async rejectOrder(req, res, next) {
 		try {
-			const order = await orderService.rejectOrder(req.params.id, req.user.id);
+			const employee = await employeeService.findOne(req.user.id);
+			const order = await orderService.rejectOrder(req.params.id, employee.id);
 			res.send(order);
 		} catch (error) {
 			next(error);
@@ -97,7 +100,8 @@ class OrderController {
 	}
 	async completeOrder(req, res, next) {
 		try {
-			const order = await orderService.completeOrder(req.params.id, req.user.id);
+			const employee = await employeeService.findOne(req.user.id);
+			const order = await orderService.completeOrder(req.params.id,employee.id);
 			res.send(order);
 		} catch (error) {
 			next(error);

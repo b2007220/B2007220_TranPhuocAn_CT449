@@ -79,21 +79,21 @@ class OrderService {
 	async acceptOrder(id, employeeId) {
 		const order = await this.#client.order.update({
 			where: { id },
-			data: { status: Status.DELIVERING, employeeId: employeeId },
+			data: { status: Status.DELIVERING, employee: { connect: { id: employeeId } } },
 		});
 		return order;
 	}
 	async rejectOrder(id, employeeId) {
 		const order = await this.#client.order.update({
 			where: { id },
-			data: { status: Status.UNACCEPTED, employeeId: employeeId },
+			data: { status: Status.UNACCEPTED, employee: { connect: { id: employeeId } } },
 		});
 		return order;
 	}
 	async completeOrder(id, employeeId) {
 		const order = await this.#client.order.update({
 			where: { id },
-			data: { status: Status.DELIVERED, employeeId: employeeId },
+			data: { status: Status.DELIVERED, employee: { connect: { id: employeeId } } },
 		});
 		return order;
 	}

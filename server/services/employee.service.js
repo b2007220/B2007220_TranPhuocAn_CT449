@@ -25,7 +25,9 @@ class EmployeeService {
 	}
 
 	async findOne(id) {
-		const employee = await this.#client.employee.findFirst({ where: { accountId: id } });
+		const employee = await this.#client.employee.findFirst({
+			where: { accountId: id },
+		});
 		return employee;
 	}
 
