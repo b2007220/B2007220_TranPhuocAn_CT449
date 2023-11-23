@@ -90,6 +90,7 @@ const product = ref({
 const createProduct = async () => {
 	try {
 		const newProduct = await productService.create(product.value);
+		
 		alert('Thêm sản phẩm thành công');
 		serverItems.value.push(newProduct);
 	} catch (error) {

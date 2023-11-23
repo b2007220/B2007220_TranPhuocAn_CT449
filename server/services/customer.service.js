@@ -17,7 +17,9 @@ class CustomerService {
 	}
 
 	async findOne(id) {
-		const customer = await this.#client.customer.findUnique({ where: { id } });
+		const customer = await this.#client.customer.findFirst({
+			where: { accountId: id },
+		});
 		return customer;
 	}
 

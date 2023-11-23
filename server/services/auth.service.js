@@ -46,6 +46,15 @@ class AuthService {
 					uid: user.uid,
 				},
 			});
+			await this.#prisma.customer.create({
+				data: {
+					account: {
+						connect: {
+							id: existingUser.id,
+						},
+					},
+				},
+			});
 		}
 
 		return {

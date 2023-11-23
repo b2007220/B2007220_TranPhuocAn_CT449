@@ -147,22 +147,28 @@ const FakeAPI = {
 	},
 };
 const orders = await orderService.findAllByCustomer();
-console.log(orders);
+const summaryQuantity = orders.reduce(
+	(acc, cur) => acc + cur.orderDetails.reduce((quantityAcc, orderDetail) => quantityAcc + orderDetail.quantity, 0),
+	0,
+);
+const productNames = orders.map((order) => order.orderDetails.map((orderDetail) => orderDetail.product.name)).flat();
 export default {
 	data: () => ({
 		tab: null,
 		drawer: false,
 		itemsPerPage: 5,
 		headers: [
-			{ title: 'Tên sản phẩm', key: 'orderDetails.product.name', align: 'end' },
-			{ title: 'Giá', key: 'orderDetails.total', align: 'end' },
-			{ title: 'Số lượng', key: 'orderDetails.quantity', align: 'end' },
+			{ title: 'Tên sản phẩm', key: 'productNames', align: 'end' },
+			{ title: 'Giá', key: 'total', align: 'end' },
+			{ title: 'Số lượng', key: 'summaryQuantity', align: 'end' },
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
 		],
 		serverItems: [],
 		loading: true,
 		totalItems: 0,
+		sumQuantity: summaryQuantity,
+		productNames: productNames,
 	}),
 	computed: {
 		user() {

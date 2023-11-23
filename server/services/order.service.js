@@ -6,8 +6,15 @@ class OrderService {
 		this.#client = new PrismaClient();
 	}
 
-	async create(order) {
-		const newOrder = await this.#client.order.create({ data: order });
+	async create(data) {
+		const newOrder = await this.#client.order.create({
+			data: {
+				customer: {
+					connect: { id: data.customerId },
+				},
+				total: data.total,
+			},
+		});
 		return newOrder;
 	}
 

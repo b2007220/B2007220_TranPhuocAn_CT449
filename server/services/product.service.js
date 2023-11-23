@@ -13,7 +13,7 @@ class ProductService {
 				price: parseFloat(product.price),
 				stock: parseInt(product.stock),
 				description: product.description,
-				notes: product.notes,
+				notes: product.note,
 			},
 		});
 		return newProduct;

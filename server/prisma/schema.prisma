@@ -82,10 +82,10 @@ model Product {
 
 model OrderDetail {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId String  @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  orderId   String  @db.ObjectId
-  order     Order   @relation(fields: [orderId], references: [id])
+  productId String?  @db.ObjectId
+  product   Product? @relation(fields: [productId], references: [id])
+  orderId   String?  @db.ObjectId
+  order     Order?   @relation(fields: [orderId], references: [id])
   quantity  Int
   unitPrice Float
   discount  Float   @default(0)

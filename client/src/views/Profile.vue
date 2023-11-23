@@ -168,6 +168,7 @@ import Footer from '../components/Footer.vue';
 import { useCartStore } from '../stores/cart';
 import { useAuthStore } from '../stores/';
 import accountService from '../services/account.service';
+import orderService from '../services/order.service';
 export default {
 	components: {
 		NavBar,

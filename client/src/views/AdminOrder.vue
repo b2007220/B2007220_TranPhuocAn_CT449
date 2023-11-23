@@ -108,26 +108,33 @@ const orders = await orderService.getAll();
 
 const summary = orders.reduce((acc, cur) => acc + cur.total, 0);
 const summaryProduct = orders.reduce((acc, cur) => acc + cur.orderDetails.quantity, 0);
+const summaryQuantity = orders.reduce(
+	(acc, cur) => acc + cur.orderDetails.reduce((quantityAcc, orderDetail) => quantityAcc + orderDetail.quantity, 0),
+	0,
+);
+const productNames = orders.map((order) => order.orderDetails.map((orderDetail) => orderDetail.product.name)).flat();
 export default {
 	data: () => ({
 		itemsPerPage: 5,
 		headers: [
 			{
-				title: 'Đơn đặt hàng',
+				title: 'Khách hàng',
 				align: 'start',
 				sortable: false,
 				key: 'customer.account.fullName',
 			},
-			{ title: 'Tên sản phẩm', key: 'orderDetails.product.name', align: 'end' },
-			{ title: 'Số lượng', key: 'orderDetails.quantity', align: 'end' },
+			{ title: 'Tên sản phẩm', key: 'productNames', align: 'end' },
+			{ title: 'Số lượng', key: 'summaryQuantity', align: 'end' },
 			{ title: 'Ngày đặt hàng', key: 'orderDate', align: 'end' },
-			{ title: 'Nhân viên phụ trách', key: 'employee.account.fullName', align: 'end' },
+			{ title: 'Nhân viên phụ trách', key: 'employee[0].account.fullName', align: 'end' },
 			{ title: 'Trạng thái', key: 'status', align: 'end' },
 			{ title: 'Chỉnh sửa', key: 'edit', align: 'end' },
 		],
 		serverItems: [],
 		loading: true,
 		totalItems: 0,
+		summaryQuantity: summaryQuantity,
+		productNames: productNames,
 	}),
 	methods: {
 		loadItems({ page, itemsPerPage, sortBy }) {

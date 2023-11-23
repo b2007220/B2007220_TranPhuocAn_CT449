@@ -7,7 +7,15 @@ class EmployeeService {
 	}
 
 	async create(employee) {
-		const newEmployee = await this.#client.employee.create({ data: employee });
+		const newEmployee = await this.#client.employee.create({
+			data: {
+				account: {
+					connect: {
+						id: employee.accountId,
+					},
+				},
+			},
+		});
 		return newEmployee;
 	}
 
@@ -17,8 +25,7 @@ class EmployeeService {
 	}
 
 	async findOne(id) {
-	
-		const employee = await this.#client.employee.findFirst({ where: { accountId:id } });
+		const employee = await this.#client.employee.findFirst({ where: { accountId: id } });
 		return employee;
 	}
 

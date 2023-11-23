@@ -7,7 +7,22 @@ class OrderDetailService {
 	}
 
 	async create(orderDetail) {
-		const newOrderDetail = await this.#client.orderDetail.create({ data: orderDetail });
+		const newOrderDetail = await this.#client.orderDetail.create({
+			data: {
+				quantity: orderDetail.quantity,
+				unitPrice: orderDetail.unitPrice,
+				product: {
+					connect: {
+						id: orderDetail.productId,
+					},
+				},
+				order: {
+					connect: {
+						id: orderDetail.orderId,
+					},
+				},
+			},
+		});
 		return newOrderDetail;
 	}
 
